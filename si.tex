@@ -1,0 +1,323 @@
+\documentclass[journal=jcp,manuscript=suppinfo]{achemso}
+\setkeys{acs}{maxauthors=0,articletitle=true}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{achemso}
+\usepackage{graphics}
+\usepackage{amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage[table]{xcolor}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage{amsopn}
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{color}
+\usepackage{array}
+\usepackage{lscape}
+\usepackage{mciteplus}
+\usepackage[version=3]{mhchem}
+\usepackage{ulem}
+\usepackage{listings}
+\usepackage{enumerate}
+
+\captionsetup{labelfont=bf}
+\SectionNumbersOn
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\newlength{\wordwidth}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\author{Janus J. Eriksen}
+\email{janus.eriksen@bristol.ac.uk}
+\affiliation{School of Chemistry, University of Bristol, Cantock's Close, Bristol BS8 1TS, United Kingdom}
+\author{J. Emiliano Deustua}
+% edeustua@chemistry.msu.edu
+\affiliation{Department of Chemistry, Michigan State University, East Lansing, MI 48824, USA}
+\author{Khaldoon Ghanem}
+% k.ghanem@fkf.mpg.de
+\affiliation{Max-Planck-Institut f{\"u}r Festk{\"o}rperforschung, 70569 Stuttgart, Germany}
+\author{Diptarka Hait}
+% diptarka@berkeley.edu
+\affiliation{Kenneth S. Pitzer Center for Theoretical Chemistry, Department of Chemistry, University of California, Berkeley, California 94720, USA}
+\alsoaffiliation{Chemical Sciences Division, Lawrence Berkeley National Laboratory, Berkeley, California 94720, USA}
+\author{Seunghoon Lee}
+% seunghoonlee89@gmail.com
+\affiliation{Division of Chemistry and Chemical Engineering, California Institute of Technology, Pasadena, California 91125, USA}
+\author{Ilias Magoulas}
+% magoulas@chemistry.msu.edu
+\affiliation{Department of Chemistry, Michigan State University, East Lansing, MI 48824, USA}
+\author{Jun Shen}
+% jun@chemistry.msu.edu
+\affiliation{Department of Chemistry, Michigan State University, East Lansing, MI 48824, USA}
+\author{Enhua Xu}
+% xuenhua@person.kobe-u.ac.jp
+\affiliation{Graduate School of Science, Technology, and Innovation, Kobe University, 1-1 Rokkodai-cho, Nada-ku, Kobe 657-8501, Japan}
+\author{Ning Zhang}
+\affiliation{Beijing National Laboratory for Molecular Sciences, Institute of Theoretical and Computational Chemistry, College of Chemistry and Molecular Engineering, Beijing 100871, China}
+\author{Ali Alavi}
+\email{a.alavi@fkf.mpg.de}
+\affiliation{Max-Planck-Institut f{\"u}r Festk{\"o}rperforschung, 70569 Stuttgart, Germany}
+\alsoaffiliation{Department of Chemistry, University of Cambridge, Cambridge CB2 1EW, United Kingdom}
+\author{Garnet Kin-Lic Chan}
+\email{gkc1000@gmail.com}
+\affiliation{Division of Chemistry and Chemical Engineering, California Institute of Technology, Pasadena, California 91125, USA}
+\author{Martin Head-Gordon}
+\email{mhg@cchem.berkeley.edu}
+\affiliation{Kenneth S. Pitzer Center for Theoretical Chemistry, Department of Chemistry, University of California, Berkeley, California 94720, USA}
+\alsoaffiliation{Chemical Sciences Division, Lawrence Berkeley National Laboratory, Berkeley, California 94720, USA}
+\author{Mark R. Hoffmann}
+\email{mark.hoffmann@und.edu}
+\affiliation{Chemistry Department, University of North Dakota, Grand Forks, ND 58202-9024, USA}
+\author{Wenjian Liu}
+\email{liuwj@sdu.edu.cn}
+\affiliation{Qingdao Institute for Theoretical and Computational Sciences, Shandong University, Qingdao, Shandong 266237, China}
+\author{Piotr Piecuch}
+\email{piecuch@chemistry.msu.edu}
+\affiliation{Department of Chemistry, Michigan State University, East Lansing, MI 48824, USA}
+\alsoaffiliation{Department of Physics and Astronomy, Michigan State University, East Lansing, MI 48824, USA}
+\author{Sandeep Sharma}
+\email{sandeep.sharma@colorado.edu}
+\affiliation{Department of Chemistry and Biochemistry, The University of Colorado at Boulder, Boulder, Colorado 80302, USA}
+\author{Seiichiro L. Ten-no}
+\email{tenno@garnet.kobe-u.ac.jp}
+\affiliation{Graduate School of Science, Technology, and Innovation, Kobe University, 1-1 Rokkodai-cho, Nada-ku, Kobe 657-8501, Japan}
+\author{Cyrus J. Umrigar}
+\email{cyrusumrigar@gmail.com}
+\affiliation{Laboratory of Atomic and Solid State Physics, Cornell University, Ithaca, New York 14853, USA}
+\author{J{\"u}rgen Gauss}
+\email{gauss@uni-mainz.de}
+\affiliation{Department Chemie, Johannes Gutenberg-Universit{\"a}t Mainz, Duesbergweg 10-14, 55128 Mainz, Germany}
+
+\renewcommand*\titlesize{\Large}
+\renewcommand*\authorsize{\small}
+\renewcommand*\affilsize{\footnotesize}
+\renewcommand*\emailsize{\scriptsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[TITLE]{The Ground State Electronic Energy of Benzene}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+%
+
+\newpage
+
+\section{Geometry}
+
+The geometry of benzene used in our study is the MP2/6-31G$^{\ast}$ optimized structure from Ref. \citenum{sauer_thiel_cc3_benchmark_jcp_2008}, cf. Table \ref{geometry_SI_table}. For reference, the nuclear repulsion and Hartree-Fock energies are $E_{\text{nuc}} = 203.15350971$ $E_{\text{H}}$ and $E_{\text{HF}} = -230.721819131$ $E_{\text{H}}$, respectively.
+%
+\begin{table}[ht]
+\begin{center}
+\caption{C$_6$H$_6$ (in \AA).}
+\label{geometry_SI_table}
+\begin{tabular}{c|rrr}
+\toprule
+\multicolumn{1}{c|}{Atom} & \multicolumn{1}{c}{$x$} & \multicolumn{1}{c}{{\textbf{$y$}}} & \multicolumn{1}{c}{{\textbf{$z$}}} \\
+\midrule\midrule
+C & $0.000000$ & $1.396792$ & $0.000000$ \\
+C & $0.000000$ & $-1.396792$ & $0.000000$ \\
+C & $1.209657$ & $0.698396$ & $0.000000$ \\
+C & $-1.209657$ & $-0.698396$ & $0.000000$ \\
+C & $-1.209657$ & $0.698396$ & $0.000000$ \\
+C & $1.209657$ & $-0.698396$ & $0.000000$ \\
+H & $0.000000$ & $2.484212$ & $0.000000$ \\
+H & $2.151390$ & $1.242106$ & $0.000000$ \\
+H & $-2.151390$ & $-1.242106$ & $0.000000$ \\
+H & $-2.151390$ & $1.242106$ & $0.000000$ \\
+H & $2.151390$ & $-1.242106$ & $0.000000$ \\
+H & $0.000000$ & $-2.484212$ & $0.000000$ \\
+\midrule
+\end{tabular}
+\vspace{-1.4cm}
+\end{center}
+\end{table}
+%
+
+\section{MBE-FCI}
+
+%
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[scale=0.75]{figures/mbe_fci/mbe_fci.pdf}
+\caption{MBE-FCI results.}
+\label{mbe_fci_SI_fig}
+\end{center}
+\vspace{-0.6cm}
+\end{figure}
+%
+In MBE-FCI theory~\cite{eriksen_mbe_fci_jpcl_2017,eriksen_mbe_fci_weak_corr_jctc_2018,eriksen_mbe_fci_strong_corr_jctc_2019,eriksen_mbe_fci_general_jpcl_2019}, the complete set of MOs for a given system is divided into a reference and an expansion space. An MBE-FCI expansion in the latter of these space hence recovers the residual correlation not captured by an FCI calculation constrained to the former. The MBE-FCI calculation of the present work is presented in Figure \ref{mbe_fci_SI_fig}, as performed in an embarrassingly parallel manner using the open-source {\texttt{PyMBE}} code~\cite{pymbe} on Intel Xeon E5-2697v4 (Broadwell) hardware (36 cores $@$ 2.3 GHz, 3.56 GB/core). The calculation was performed in a basis of localized Pipek-Mezey MOs~\cite{pipek_mezey_jcp_1989} with a ($6e$,$6$o) reference space consisting of the $\pi$- and $\pi^{\ast}$-orbitals and electrons. The final correlation energy is $\Delta E_{\text{MBE-FCI}} = -863.03$ m$E_{\text{H}}$.\\
+
+In the course of preparing the code for running high-accuracy MBE-FCI calculations on the benzene molecule, a new screening protocol was implemented. At each order, MOs are screened away from the full expansion space according to their relative (absolute) magnitude, which in turn leads to a reduced number of increment calculations at the orders to follow. Specifically, only the MOs of the expansion space (at any given order) that give rise to the numerically largest increments will be retained at the following order. For the calculation of the present work, the percentages of the expansion space retained ($a_{\text{retain}}$) alongside the number of individual CASCI calculations at any given order ($K_{\text{CASCI}}$) are presented in Table \ref{mbe_fci_SI_table}. In addition, a number of optimizations were made to the code base. Most crucially, a new pruning scheme was introduced to make sure that only non-redundant increments are stored in memory throughout the total MBE-FCI calculation. For instance, once the $i$th MO gets screened away from the expansion space, all increments at lower orders, which reference this MO, are not needed anymore and may thus be pruned. This allows for significantly larger problem sizes to be treated by the method. As such, the limiting factor in converging MBE-FCI even tighter for the problem at hand, that is, screening less throughout the expansion, is related to available computer ressources rather than physical memory.
+%
+\begin{table}[ht]
+\begin{center}
+\caption{MBE-FCI calculation details.}
+\label{mbe_fci_SI_table}
+\begin{tabular}{l|r|r|r}
+\toprule
+\multicolumn{1}{c|}{Order} & \multicolumn{1}{c|}{$a_{\text{retain}}/\%$} & \multicolumn{1}{c|}{$\Delta E$/m$E_{\text{H}}$} & \multicolumn{1}{c}{$K_{\text{CASCI}}$} \\
+\midrule\midrule
+1 & 100.0 & $-95.1132$ & 102 \\
+2 & 100.0 & $-469.884$ & 5,151 \\
+3 & 100.0 & $-715.265$ & 171,700 \\
+4 & 100.0 & $-876.637$ & 4,249,575 \\
+5 & 100.0 & $-876.624$ & 83,291,670 \\
+6 & 50.0 & $-862.988$ & 1,346,548,665 \\
+7 & 25.0 & $-863.027$ & 115,775,100 \\
+8 & 12.5 & $-863.027$ & 495 \\
+\midrule
+\end{tabular}
+\end{center}
+\end{table}
+%
+
+\section{DMRG}
+
+For details on DMRG theory, please see a number of contemporary reviews on the topic~\cite{chan_dmrg_2011,wouters_dmrg_2014,knecht_dmrg_2016}. All DMRG calculations were performed using the {\texttt{BLOCK}} code~\cite{chan_head_gordon_dmrg_jcp_2002,chan_dmrg_jcp_2004,chan_polyacetylenes_jcp_2008,sharma_chan_dmrg_2012,chan_dmrg_2015}, executed through the {\texttt{PySCF}} program~\cite{pyscf_prog,pyscf_paper,pyscf_arxiv_2020}, on Intel Xeon CPU E5-2680v4 (28-36 cores $@$ 2.4 GHz, 9.85 GB/core) and Gold 6130 (32 cores $@$ 2.1 GHz, 6.0 GB/core) nodes. DMRG yields two separate results: a variational upper bound and an extrapolated number based on different bond dimensions. The lowest variational correlation energy is $\Delta E_{\text{DMRG(var)}} = -859.5$ m$E_{\text{H}}$, while the extrapolated result (infinite bond dimension estimate) is $\Delta E_{\text{DMRG}(\infty)} = -862.8$ m$E_{\text{H}}$, cf. Figure \ref{dmrg_SI_fig}. The standard procedure for estimating error bars from the extrapolation is to report these as a fraction of the extrapolation distance. However, the resulting uncertainties may become unreasonably large. Here, the estimate ($1/5$ extrapolation distance error metric) is $0.7$ m$E_{\text{H}}$, not to be confused with the error of the fit (about $0.2$ m$E_{\text{H}}$).
+%
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[scale=0.75]{figures/dmrg/dmrg.pdf}
+\caption{DMRG results.}
+\label{dmrg_SI_fig}
+\end{center}
+\end{figure}
+%
+
+\section{AS-FCIQMC}\label{as_fciqmc_SI_sect}
+
+For details on the adaptive shift formalism, please see Ref. \citenum{ghanem_alavi_fciqmc_jcp_2019}. All AS-FCIQMC calculations were performed using the {\texttt{NECI}} code~\cite{neci} in parallel on Intel Xeon CPU E5-2698v4 nodes (40 cores $@$ 2.2 GHz, 6.4 GB/core). The orbitals used were those of a preceding RHF orbitals and the FCIQMC runs were performed in a basis of pure Slater determinants (no spin adaptation). Following an equilibration run with $\num{1.e8}$ walkers (yielding a correlation energy of $\Delta E_{\text{AS-FCIQMC(init)}} = -863.3\pm0.9$ m$E_{\text{H}}$), a first calculation with $\num{1.e9}$ (1B) walkers (growing from $\num{1.e8}$) yielded a correlation energy $\Delta E_{\text{AS-FCIQMC(1B)}} = -864.8\pm0.5$ m$E_{\text{H}}$. Next, a second calculation with $\num{2.e9}$ (2B) walkers (growing from $\num{1.e9}$) resulted in a correlation energy of $\Delta E_{\text{AS-FCIQMC(2B)}} = -863.7\pm0.3$ m$E_{\text{H}}$. The stochastic error bar of $0.3$ m$E_{\text{H}}$ is derived by averaging over the last 2637 time steps (discarding the first 5000 time steps for walker growth and equilibration period), and doing a blocking analysis. The AS‐FCIQMC(2B) result is used in Fig. 1 of the main study.
+
+\section{CAD-FCIQMC}
+
+A CAD-FCIQMC calculation consists of three steps~\cite{piecuch_monte_carlo_cc_prl_2017,piecuch_monte_carlo_cc_jcp_2018,piecuch_monte_carlo_eom_cc_jcp_2019,piecuch_mg_dimer_sci_adv_2020}: {\bf{(i)}} a stochastic FCIQMC run to produce the wave function for the subsequent cluster analysis (information only needed of the CI wave function through the $\{\bm{c}_4\}$ coefficients), {\bf{(ii)}} a cluster analysis of the wave function to extract CC cluster amplitudes through $\{\bm{t}_4\}$, and {\bf{(iii)}} a CCSD-like calculation in which $\{\bm{t}_1,\bm{t}_2\}$ are deterministically computed in the presence of $\{\bm{t}_3,\bm{t}_4\}$. In the context of the present work, the CAD-FCIQMC calculations were run on the AS-FCIQMC wave functions of Sect. \ref{as_fciqmc_SI_sect} (1B and 2B). Both the cluster analysis and the following CCSD-like calculation were performed using a specialized code developed in the Piecuch group on a shared-memory Dell node consisting of two 10-core Intel Xeon Silver 4114 (2.2 GHz, {\color{red}{XX}} GB/core) processors. The $\{\bm{t}_1,\bm{t}_2\}$ amplitudes extracted from the AS-FCIQMC wave function were used as an initial guess for the final CCSD-like iterations, and 10 iterations were needed to converge the final CAD-FCIQMC energy to within $\num{1.0e-6}$ $E_{\text{H}}$. To eliminate the need for storing large sets of the quadruples cluster amplitudes, the cluster analysis code used in this work stored only $\{\bm{t}_1,\bm{t}_2,\bm{t}_3\}$ amplitudes extracted from FCIQMC, while the $\{\bm{t}_4\}$ amplitudes were processed on the fly. Specifically, only the $\langle \Phi_{ij}^{ab} | (\hat{V}_N \hat{T}_4)_C | \Phi \rangle$ terms of the CCSD system (corrected for $\{\bm{t}_3,\bm{t}_4\}$) were stored, as the number of these scale as the number of doubly excited determinants ($| \Psi_{ij}^{ab} \rangle$) rather than the entire $\{\bm{t}_4\}$ vector.\\
+
+%
+\begin{table}[ht]
+\begin{center}
+\caption{CAD-FCIQMC calculation details.}
+\label{cad_fciqmc_SI_table}
+\begin{tabular}{l|r}
+\toprule
+\multicolumn{1}{c|}{Method} & \multicolumn{1}{c}{$\Delta E$/m$E_{\text{H}}$} \\
+\midrule\midrule
+AS-FCIQMC(1B) & $-864.8\pm0.5$ \\
+CAD-FCIQMC-ext(1B) & $-867.01$ \\
+CAD‐FCIQMC$[1$‐$5]$(1B) & $-864.09$ \\
+CAD‐FCIQMC$[1,(3$+$4)/2]$(1B) & $-863.86$ \\
+\hline
+AS-FCIQMC(2B) & $-863.7\pm0.3$ \\
+CAD-FCIQMC-ext(2B) & $-863.46$ \\
+CAD‐FCIQMC$[1$‐$5]$(2B) & $-863.45$ \\
+CAD‐FCIQMC$[1,(3$+$4)/2]$(2B) & $-863.44$ \\
+CAD‐FCIQMC-ext(2B, 100-avg) & $-863.46$ \\
+CAD‐FCIQMC$[1$‐$5]$(2B, 100-avg) & $-863.44$ \\
+\midrule
+\end{tabular}
+\vspace{-0.6cm}
+\end{center}
+\end{table}
+%
+All CAD-FCIQMC results are presented in Table \ref{cad_fciqmc_SI_table}. To a first approximation (CAD-FCIQMC-ext), the correlation energy was computed using $\{\bm{t}_1,\bm{t}_2\}$ amplitudes extracted directly from the AS-FCIQMC wave function. Next, the final CAD-FCIQMC energy---obtained by solving for $\{\bm{t}_1\,\bm{t}_2\}$ in the presence of $\{\bm{t}_3,\bm{t}_4\}$---was computed in either of two ways, denoted as CAD‐FCIQMC$[1$‐$5]$ and CAD‐FCIQMC$[1,(3$+$4)/2]$. The information in the square brackets relates to the given treatment of the CCSD Goldstone-Hugenholtz diagrams quadratic in the $\hat{T}_2$ operator (adopting the diagram numbering from {\color{red}{Ref. ???}}); $[1$-$5]$ implies that all five of these are treated deterministically, while $[1,(3$+$4)/2]$ implies that this only applies to diagram 1 and an average of diagrams 3 and 4 (with the remaining contributions to the equation for the doubles amplitudes calculated using $\{\bm{t}_2\}$ amplitudes extracted directly from AS-FCIQMC). Further details on the CAD‐FCIQMC$[1,(3$+$4)/2]$ algorithm, which was originally considered in one of the approximate coupled-pair theories of {\color{red}{Ref. ???}} and recently implemented in the form of a DCSD approach to help capture strong correlations {\color{red}{(Ref. ???)}}, will be described in {\color{red}{Ref. ???}}. Finally, results are presented in Table \ref{cad_fciqmc_SI_table} for which the instantaneous AS-FCIQMC wave function---obtained at the end of a stochastic propagation---was replaced by an average over the last 100 time steps (100-avg). The CAD‐FCIQMC$[1$‐$5]$(2B) result is used in Fig. 1 of the main study.
+
+\section{SHCI}
+
+For details on the most recent version of SHCI theory, please see Ref. \citenum{li_sharma_umrigar_heat_bath_ci_jcp_2018}. All SHCI calculations were performed using the {\texttt{Arrow}} code~\cite{arrow} in parallel {\color{red}{on what hardware???}} ({\color{red}{XX}} cores $@$ {\color{red}{XX}} GHz, {\color{red}{XX}} GB/core). The computed SHCI results are presented in {\color{red}{Fig. \ref{shci_SI_fig} (Cyrus and Sandeep, can you please forward me information that would allow me to make a figure similar to Figs. \ref{asci_SI_fig} and \ref{ici_SI_fig}?)}}, and the final extrapolated correlation energy is estimated to be $\Delta E_{\text{SHCI}} = -864.3\pm1.5$ m$E_{\text{H}}$ with the error bar {\color{red}{derived how???}}.
+
+\section{ASCI}
+
+%
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[scale=0.75]{figures/asci/asci.pdf}
+\caption{ASCI results.}
+\label{asci_SI_fig}
+\end{center}
+\vspace{-0.6cm}
+\end{figure}
+%
+Details on the most recent version of ASCI theory has recently been presented elsewhere~\cite{tubman_whaley_selected_ci_jctc_2020,tubman_whaley_selected_ci_pt_arxiv_2018}. All ASCI calculations were performed using {\color{red}{what code???}} in parallel on AMD EPYC 7401 hardware (24 cores $@$ 2.0 GHz, {\color{red}{XX}} GB/core). The computed ASCI results are presented in Figure \ref{asci_SI_fig}, and the final extrapolated correlation energy is estimated to be $\Delta E_{\text{ASCI}} = -859.97\pm0.2$ m$E_{\text{H}}$ with the error bar spanned by the uncertainty in the extrapolation towards the limit of zero PT2 correction (standard deviation of a linear fit with last 3 points).
+
+\section{iCI}
+
+The iCI approach~\cite{liu_hoffmann_ici_jctc_2016,liu_hoffmann_ici_jctc_2020}, which was born from the restricted static-dynamic-static~\cite{liu_hoffmann_sds_tca_2014} (SDS) framework for treating strongly correlated electrons, is a method designed to converge from above to the FCI limit within just a few iterations, by constructing and diagonalizing a $3N_P\times3N_P$ Hamiltonian matrix at each macro/micro-iteration, even when starting with a very poor initial guess. Here, $N_P$ denotes the number of target states. This convergence behaviour is hardly surprising, since the lowest order realization of the SDS framework, i.e., SDSPT2~\cite{liu_hoffmann_sdspt2_mp_2017}, already performs very well for prototypical systems of variable near degeneracies. However, iCI is computationally very expensive. One way out is to combine iCI with the idea of configuration selection, so as to generate a compact variational space for static correlation. The remaining dynamic correlation is treated via Epstein-Nesbet PT2. In brief, iCI has the following features: {\bf{(i)}} Full spin symmetry is always maintained by taking configuration state functions (CSF) as the many-electron basis. {\bf{(ii)}} Although the selection is performed on individual CSFs, it is orbital configurations (oCFG) that are used as the organizing units. {\bf{(iii)}} Given a coefficient pruning threshold, $C_{\text{min}}$ (which determines the size of the variational space for static correlation), the selection of important oCFGs/CSFs is performed iteratively until convergence. {\bf{(iv)}} At each iteration in the growth of the wave function, the first-order interacting space is decomposed into disjoint subspaces, so as to reduce memory requirement on one hand and facilitate parallelization on the other. {\bf{(v)}} Upper bounds (which involve only two-electron integrals) for the interactions between doubly connected oCFG pairs are used to screen each first-order interacting subspace before the first-order coefficients of individual CSFs are evaluated. {\bf{(vi)}} Upon termination of the selection, dynamic correlation is estimated by using state-specific Epstein-Nesbet PT2 (iCIPT2). Results were obtained in $D_{2\text{h}}$ point group symmetry using either HF or natural (NO) orbitals, cf. Fig. \ref{ici_SI_fig}, of which the linearly extrapolated (using the last six data points) iCIPT2(NO) result of $\Delta E_{\text{iCIPT2(NO)}} = -861.05\pm0.5$ m$E_{\text{H}}$ is used in Fig. 1 of the main study. Calculations were run using BDF (Beijing Density Functional) program~\cite{bdf_prog_tca_1997,bdf_prog_jcp_2020} on a single node with two Intel Xeon E5-2640 v3 processors (16 cores $@$ 2.6 GHz, 8.0 GB/core), and the OpenMP efficiency was approximately $50$ $\%$.\\
+
+%
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[scale=0.75]{figures/ici/ici.pdf}
+\caption{iCI results. Original results are plotted with solid lines, updated results (not part of main study) are plotted with hashed lines.}
+\label{ici_SI_fig}
+\end{center}
+\vspace{-0.6cm}
+\end{figure}
+%
+Following the submission of the iCI result in Fig. 1 of the main study (Ref. \citenum{liu_hoffmann_ici_jctc_2020}), the efficiency of the method was increased by a factor of nearly 20. As such, the same $C_{\text{min}}$ values now always lead to smaller variational space, which has allowed for larger calculations than what was previously possible using either canonical HF orbitals or NOs. These updated results (not part of the blind challenge) are also presented in Fig. \ref{ici_SI_fig} (with hashed lines). These are estimated to be more accurate than the original results since the selected variational space is larger. Moreover, the updated iCIPT2(NO) results are again estimated to be more reliable than the corresponding iCIPT2(HF) results since the former are always lower than the latter for each considered $C_{\text{min}}$ value. Furthermore, the gap between the smallest $C_{\text{min}}$ value and the extrapolated value is smaller for iCIPT2(NO) than for iCIPT2(HF). The linear extrapolations (again not shown) yield final correlation energies of $\Delta E_{\text{iCIPT2(HF,new)}} = -866.07\pm1.0$ m$E_{\text{H}}$ and $\Delta E_{\text{iCIPT2(NO,new)}} = -864.15\pm0.6$ m$E_{\text{H}}$.\\
+For both the original and the updated results, the remaining difference between HF- and NO-based iCIPT2 (ca. 2 m$E_{\text{H}}$) may be understood in terms of space dimensions, as the cumulative effect of the unsampled CSFs remains substantial. To verify this argument, Cr$_2$/AVDZ may be used as an example. The difference between iCIPT2(HF) and iCIPT2(NO) in this case is within $0.1$ m$E_{\text{H}}$, correlating with the fact that the sampled space of CSFs makes up a considerably larger part of the FCI Hilbert space.
+
+\section{FCCR}
+
+%
+\begin{table}[ht!]
+\begin{center}
+\caption{FCCR calculation details.}
+\label{fccr_SI_table}
+\begin{tabular}{l|r}
+\toprule
+\multicolumn{1}{c|}{Method} & \multicolumn{1}{c}{$\Delta E$/m$E_{\text{H}}$} \\
+\midrule\midrule
+FCCR(MP) & $-860.1$ \\
+FCCR(EN) & $-865.4$ \\
+FCCR(avg) & $-862.8$ \\
+FCCR(2') & $-863.0$ \\
+\midrule
+\end{tabular}
+\vspace{-0.6cm}
+\end{center}
+\end{table}
+%
+All FCCR~\cite{ten_no_fcc_prl_2018} calculations were run {\color{red}{on what hardware???}} ({\color{red}{XX}} cores $@$ {\color{red}{XX}} GHz, {\color{red}{XX}} GB/core) using {\color{red}{what code???}}. FCCR has been augmented by approximate second-order perturbative corrections (2') similar to the (T) correction to CCSD. Besides the bare FCCR result, cf. Table \ref{fccr_SI_table}, obtained with a connectivity threshold of 0.03, 4,818,644 CC amplitudes, and an operation threshold of $\num{3.e-7}$, the perturbation energy may be partitioned in a M\o ller-Plesset (MP) or Epstein-Nesbet (EN) fashion. The final FCI energy is estimated to lie very close to the average (avg) of these two results, which may further be corrected for the operation threshold based on CCSD, resulting in a final FCCR(2') correlation energy of $\Delta E_{\text{FCCR(2')}} = -863.0$ m$E_{\text{H}}$.
+
+\section{CCSDTQ}
+
+The CCSDTQ~\cite{ccsdtq_paper_1_jcp_1991,ccsdtq_paper_2_jcp_1992} correlation energy of $\Delta E_{\text{CCSDTQ}} = -862.37$ m$E_{\text{H}}$ was obtained using the {\texttt{NCC}} module of the {\texttt{CFOUR}} program~\cite{matthews_stanton_ccsdtq_jcp_2015,ncc,cfour_paper,cfour} on a single Intel Xeon CPU E5-4620 node (8 cores $@$ 2.2 GHz, 48.0 GB/core). Convergence was reached in 10 iterations.
+
+\section{Cluster Decomposition}
+
+%
+\begin{table}[ht!]
+\begin{center}
+\caption{Cluster decomposition ($L_2$-norm) of a 5M-determinant ASCI wave function for excitation levels $1 \leq n \leq 6$.}
+\label{cluster_decomp_SI_table}
+\begin{tabular}{l|r|r|r}
+\toprule
+\multicolumn{1}{c|}{$n$} & \multicolumn{1}{c|}{$|\bm{c}_n|$} & \multicolumn{1}{c|}{$|\bm{t}_n|$} & \multicolumn{1}{c}{Ratio/$\%$} \\
+\midrule\midrule
+1 & $0.019477$ & $0.019477$ & $100.0$ \\
+2 & $0.533103$ & $0.533108$ & $100.0$ \\
+3 & $0.064742$ & $0.065137$ & $100.6$ \\
+4 & $0.142888$ & $0.014178$ & $9.92$ \\
+5 & $0.006201$ & $0.000465$ & $7.50$ \\
+6 & $0.008792$ & $0.001948$ & $22.16$ \\
+\midrule
+\end{tabular}
+\vspace{-0.6cm}
+\end{center}
+\end{table}
+%
+Table \ref{cluster_decomp_SI_table} presents results for a cluster decomposition~\cite{lehtola_head_gordon_fci_decomp_jcp_2017} of an ASCI wave function with $\num{5.e6}$ determinants. These results indicate how most of the $\{\bm{c}_4\}$ CI coefficients comes from disconnected terms and ditto for higher-order excitations. 
+
+\newpage
+
+\bibliography{/Users/janus/Dropbox/refs.bib}
+
+%
+\end{document}

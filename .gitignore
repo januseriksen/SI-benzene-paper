@@ -1,0 +1,6 @@
+si.aux
+si.bbl
+si.blg
+si.log
+si.pdf
+figures/*/.mypy_cache
