@@ -3,4 +3,5 @@ si.bbl
 si.blg
 si.log
 si.pdf
+acs-si.bib
 figures/*/.mypy_cache
