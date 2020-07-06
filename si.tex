@@ -493,7 +493,7 @@ The size-extensive FCCR method exploits screenings within the single-reference C
 %
 \begin{table}[ht!]
 \begin{center}
-\caption{FCCR calculation details.}
+\caption{FCCR calculation details (blind test).}
 \label{fccr_SI_table}
 \begin{tabular}{l|r}
 \toprule
@@ -514,7 +514,7 @@ Table \ref{fccr_SI_table} shows the result of FCCR(2') with the M{\o}ller-Plesse
 %
 \begin{table}[ht!]
 \begin{center}
-\caption{Updated FCCR calculation details.}
+\caption{FCCR calculation details (updated results).}
 \label{fccr_update_SI_table}
 \begin{tabular}{r|r|r|r|r}
 \toprule
@@ -532,7 +532,7 @@ $2\times10^{-4}$   &  -856.84 & 229,842 & -35.11 & $6.4\times10^{8}$ \\
 \end{center}
 \end{table}
 %
-A fast and more systematic estimate of the FCI limit is enabled by the extrapolation of FCCR(2). Table \ref{fccr_update_SI_table} presents an updated FCCR(2) correlation energy along with the second-order correction of the MP partitioning as a function of the principal screening threshold $\vartheta\rm_{\mathcal P}$. Besides $\vartheta_{\mathcal O}$, the latest implementation of FCCR(2) controls the excitation manifold in terms of the two screening parameters, $\vartheta_{\mathcal P}$ to select the cluster operators of ${\mathcal P}$ perturbatively and $\vartheta_{\mathcal G}$ for the generator space $({\mathcal G})$ to discriminate strong correlation in ${\mathcal P}$.\cite{ten_no_fccr_2020} Except for $\vartheta_{\mathcal P}$, all screening parameters are fixed to be $\vartheta_{\mathcal G}=0.01$, $\vartheta_{\mathcal O}=10^{-7}$ for FCCR, and $\vartheta_{\mathcal O}=3.0\times10^{-6}$ for $E^{(2)}$. Tightening $\vartheta\rm_{\mathcal P}$ increases the accuracy of FCCR(2) according to the increasing dimensions of ${\mathcal P}$ and ${\mathcal Q}$. It is found that a linear relationship holds~\cite{ten_no_fccr_2020} between $\Delta E_{\rm FCCR(2)}$ and $E^{\rm (2)}$, as shown in Fig. \ref{fccr_updated_SI_fig}, and the best estimate of FCCR(2) based on the extrapolation is $-862.83{\rm m}E_{\rm H}$. The calculations for the four values of $\vartheta\rm_{\mathcal P}$ in Table \ref{fccr_update_SI_table} required 0.035M, 0.048M, 0.073M and 0.134M core hours, respectively, using 640 MPI processes. The algorithmic details of the FCCR(2) implementation and other applications will be elaborated in a separate paper~\cite{ten_no_fccr_2020}.
+A fast and more systematic estimate of the FCI limit is enabled by the extrapolation of FCCR(2). Table \ref{fccr_update_SI_table} presents an updated FCCR(2) correlation energy (not part of the blind challenge) along with the second-order correction of the MP partitioning as a function of the principal screening threshold $\vartheta\rm_{\mathcal P}$. Besides $\vartheta_{\mathcal O}$, the latest implementation of FCCR(2) controls the excitation manifold in terms of the two screening parameters, $\vartheta_{\mathcal P}$ to select the cluster operators of ${\mathcal P}$ perturbatively and $\vartheta_{\mathcal G}$ for the generator space $({\mathcal G})$ to discriminate strong correlation in ${\mathcal P}$.\cite{ten_no_fccr_2020} Except for $\vartheta_{\mathcal P}$, all screening parameters are fixed to be $\vartheta_{\mathcal G}=0.01$, $\vartheta_{\mathcal O}=10^{-7}$ for FCCR, and $\vartheta_{\mathcal O}=3.0\times10^{-6}$ for $E^{(2)}$. Tightening $\vartheta\rm_{\mathcal P}$ increases the accuracy of FCCR(2) according to the increasing dimensions of ${\mathcal P}$ and ${\mathcal Q}$. It is found that a linear relationship holds~\cite{ten_no_fccr_2020} between $\Delta E_{\rm FCCR(2)}$ and $E^{\rm (2)}$, as shown in Fig. \ref{fccr_updated_SI_fig}, and the best estimate of FCCR(2) based on the extrapolation is $-862.83{\rm m}E_{\rm H}$. The calculations for the four values of $\vartheta\rm_{\mathcal P}$ in Table \ref{fccr_update_SI_table} required 0.035M, 0.048M, 0.073M and 0.134M core hours, respectively, using 640 MPI processes. The algorithmic details of the FCCR(2) implementation and other applications will be elaborated in a separate paper~\cite{ten_no_fccr_2020}.
 %
 \begin{figure}[ht!]
 \begin{center}
