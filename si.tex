@@ -488,6 +488,8 @@ half length of 95\% confidence interval.}
 
 \section{FCCR}
 
+The size-extensive FCCR method exploits screenings within the single-reference CC formalism for constructing the excitation manifold $({\mathcal P})$ and to exclude insignificant operation mostly arising from the nonlinear terms of the working equation~\cite{ten_no_fcc_prl_2018}. The subsequent FCCR(2) computes the second-order perturbative correction to FCCR using the entire interacting space $({\mathcal Q})$ orthogonal to ${\mathcal P}$ generated through $[\hat H, \hat T_{\rm FCCR}]$~\cite{ten_no_fccr_2020}. For single-reference systems, FCCR(2') which approximate the $\hat \lambda$ amplitudes by $\hat T^{\dagger}$ is also available. All calculations were performed using the \texttt{GELLAN} program~\cite{gellan} in parallel on Intel Xeon Gold 6148 nodes (40 cores @ 2.4 GHz).\\
+
 %
 \begin{table}[ht!]
 \begin{center}
@@ -500,14 +502,47 @@ half length of 95\% confidence interval.}
 FCCR(MP) & $-860.1$ \\
 FCCR(EN) & $-865.4$ \\
 FCCR(avg) & $-862.8$ \\
-FCCR(2') & $-863.0$ \\
+FCCR(avg) + $\vartheta_{\mathcal O}$ corr. & $-863.0$ \\
 \midrule
 \end{tabular}
 \vspace{-0.6cm}
 \end{center}
 \end{table}
 %
-All FCCR~\cite{ten_no_fcc_prl_2018} calculations were run {\color{red}{on what hardware???}} ({\color{red}{XX}} cores $@$ {\color{red}{XX}} GHz, {\color{red}{XX}} GB/core) using {\color{red}{what code???}}. FCCR has been augmented by approximate second-order perturbative corrections (2') similar to the (T) correction to CCSD. Besides the bare FCCR result, cf. Table \ref{fccr_SI_table}, obtained with a connectivity threshold of 0.03, 4,818,644 CC amplitudes, and an operation threshold of $\num{3.e-7}$, the perturbation energy may be partitioned in a M\o ller-Plesset (MP) or Epstein-Nesbet (EN) fashion. The final FCI energy is estimated to lie very close to the average (avg) of these two results, which may further be corrected for the operation threshold based on CCSD, resulting in a final FCCR(2') correlation energy of $\Delta E_{\text{FCCR(2')}} = -863.0$ m$E_{\text{H}}$.
+Table \ref{fccr_SI_table} shows the result of FCCR(2') with the M{\o}ller-Plesset (MP) and Epstein-Nesbet (EN) partitionings with the connectivity threshold $\vartheta_{\mathcal C}=0.03$ and the operation threshold $\vartheta_{\mathcal O}=3.0 \times 10^{-7}$ as combined with the exclusion-principle-violating (EPV) form of the screening~\cite{ten_no_fcc_prl_2018}, leading to 4,818,644 FCCR cluster amplitudes. The FCI energy is estimated to lie very close to the average of the MP and EN results from various benchmarks (avg.), which may further be corrected for $\vartheta_{\mathcal O}$ based on CCSD, resulting in the estimate $-862.98 {\rm m}E_{\rm H}$. This calculation required 0.1M core hours invoking 640 MPI processes. The interacting space ${\mathcal Q}$ for the second-order correction is perfectly distributed to the processes, and the memory requirement of the present FCCR(2') calculation is at most 2GB per process.\\
+
+%
+\begin{table}[ht!]
+\begin{center}
+\caption{Updated FCCR calculation details.}
+\label{fccr_update_SI_table}
+\begin{tabular}{r|r|r|r|r}
+\toprule
+\multicolumn{1}{c|}{$\vartheta_{\mathcal{P}}$} & \multicolumn{1}{c|}{$\Delta E$/m$E_{\text{H}}$} & \multicolumn{1}{c|}{$N_{\mathcal{P}}$} & \multicolumn{1}{c|}{$E^{(2)}$/m$E_{\text{H}}$} & \multicolumn{1}{c}{$N_{\mathcal{Q}}$} \\
+\midrule\midrule
+$5\times10^{-4}$   &  -849.05 & 109,860 & -81.09 & $2.2\times10^{8}$ \\
+$4\times10^{-4}$   &  -852.25 & 137,421 & -62.36 & $2.6\times10^{8}$ \\
+$3\times10^{-4}$   &  -854.93 & 174,914 & -46.71 & $3.7\times10^{8}$ \\
+$2\times10^{-4}$   &  -856.84 & 229,842 & -35.11 & $6.4\times10^{8}$ \\
+\hline
+\multicolumn{1}{c|}{extrap.} &  -862.83 & \multicolumn{1}{c|}{---} & 0.0 & \multicolumn{1}{c|}{---} \\
+\midrule
+\end{tabular}
+\vspace{-0.6cm}
+\end{center}
+\end{table}
+%
+A fast and more systematic estimate of the FCI limit is enabled by the extrapolation of FCCR(2). Table \ref{fccr_update_SI_table} presents an updated FCCR(2) correlation energy along with the second-order correction of the MP partitioning as a function of the principal screening threshold $\vartheta\rm_{\mathcal P}$. Besides $\vartheta_{\mathcal O}$, the latest implementation of FCCR(2) controls the excitation manifold in terms of the two screening parameters, $\vartheta_{\mathcal P}$ to select the cluster operators of ${\mathcal P}$ perturbatively and $\vartheta_{\mathcal G}$ for the generator space $({\mathcal G})$ to discriminate strong correlation in ${\mathcal P}$.\cite{ten_no_fccr_2020} Except for $\vartheta_{\mathcal P}$, all screening parameters are fixed to be $\vartheta_{\mathcal G}=0.01$, $\vartheta_{\mathcal O}=10^{-7}$ for FCCR, and $\vartheta_{\mathcal O}=3.0\times10^{-6}$ for $E^{(2)}$. Tightening $\vartheta\rm_{\mathcal P}$ increases the accuracy of FCCR(2) according to the increasing dimensions of ${\mathcal P}$ and ${\mathcal Q}$. It is found that a linear relationship holds~\cite{ten_no_fccr_2020} between $\Delta E_{\rm FCCR(2)}$ and $E^{\rm (2)}$, as shown in Fig. \ref{fccr_updated_SI_fig}, and the best estimate of FCCR(2) based on the extrapolation is $-862.83{\rm m}E_{\rm H}$. The calculations for the four values of $\vartheta\rm_{\mathcal P}$ in Table \ref{fccr_update_SI_table} required 0.035M, 0.048M, 0.073M and 0.134M core hours, respectively, using 640 MPI processes. The algorithmic details of the FCCR(2) implementation and other applications will be elaborated in a separate paper~\cite{ten_no_fccr_2020}.
+%
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[scale=0.6]{figures/fccr/fccr.pdf}
+\caption{Updated FCCR results. The linear extrapolation of the FCCR(2) energy.}
+\label{fccr_updated_SI_fig}
+\end{center}
+\vspace{-0.6cm}
+\end{figure}
+%
 
 \section{CCSDTQ}
 
