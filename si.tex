@@ -262,18 +262,45 @@ All CAD-FCIQMC results are presented in Table \ref{cad_fciqmc_SI_table}. To a fi
 For details on the most recent version of SHCI theory, please see Ref. \citenum{li_sharma_umrigar_heat_bath_ci_jcp_2018}. All SHCI calculations were performed using the {\texttt{Arrow}} code~\cite{arrow} in parallel {\color{red}{on what hardware???}} ({\color{red}{XX}} cores $@$ {\color{red}{XX}} GHz, {\color{red}{XX}} GB/core). The computed SHCI results are presented in {\color{red}{Fig. \ref{shci_SI_fig} (Cyrus and Sandeep, can you please forward me information that would allow me to make a figure similar to Figs. \ref{asci_SI_fig} and \ref{ici_SI_fig}?)}}, and the final extrapolated correlation energy is estimated to be $\Delta E_{\text{SHCI}} = -864.3\pm1.5$ m$E_{\text{H}}$ with the error bar {\color{red}{derived how???}}.
 
 \section{ASCI}
-
+\label{sec:asci}
 %
 \begin{figure}[ht!]
 \begin{center}
 \includegraphics[scale=0.75]{figures/asci/asci.pdf}
-\caption{ASCI results.}
+\caption{ASCI results. Original results are plotted with solid lines, updated localized orbital results (not part of main study) are plotted with hashed lines.}
 \label{asci_SI_fig}
 \end{center}
 \vspace{-0.6cm}
 \end{figure}
 %
-Details on the most recent version of ASCI theory has recently been presented elsewhere~\cite{tubman_whaley_selected_ci_jctc_2020,tubman_whaley_selected_ci_pt_arxiv_2018}. All ASCI calculations were performed using {\color{red}{what code???}} in parallel on AMD EPYC 7401 hardware (24 cores $@$ 2.0 GHz, {\color{red}{XX}} GB/core). The computed ASCI results are presented in Figure \ref{asci_SI_fig}, and the final extrapolated correlation energy is estimated to be $\Delta E_{\text{ASCI}} = -859.97\pm0.2$ m$E_{\text{H}}$ with the error bar spanned by the uncertainty in the extrapolation towards the limit of zero PT2 correction (standard deviation of a linear fit with last 3 points).
+Details on the most recent version of ASCI theory has recently been presented elsewhere~\cite{tubman_whaley_selected_ci_jctc_2020,tubman_whaley_selected_ci_pt_arxiv_2018}. 
+All ASCI calculations were performed using a development version of Q-Chem 5.2\cite{shao2015advances}  on AMD EPYC 7401 hardware (2.0 GHz, 5.3 GB/core). The CI component was run in parallel over 24 processors but the subsequent Epstein-Nesbet PT2 correction was computed on a single processor. The active space orbitals were optimized from canonical HF MOs in an MCSCF manner (while only considering active-active rotations, i.e. keeping the core levels frozen), using $5\times 10^5$ ASCI selected determinants  \cite{levine2020casscf}, prior to PT2 calculations with varying number of determinants.
+The computed ASCI results are presented in  Figure \ref{asci_SI_fig}, and the final extrapolated correlation energy is estimated to be $\Delta$E$_\textrm{ASCI}$ =-860.0 $\pm$ 0.2 m$E_{\text{H}}$ with the error bar spanned by the uncertainty in the extrapolation towards the limit of zero PT2 correction (standard deviation of a linear fit with last 3 points, as described in Ref \citenum{hait2019levels}).
+
+\subsection{ASCI with localized orbitals}
+\label{sec:asciloc}
+Subsequent to the blind challenge, an additional effort was made to determine the impact of using spatial symmetry broken localized orbitals as an initial guess instead of delocalized canonical MOs. The occupied canonical orbitals were consequently Pipek-Mezey localized\cite{pipek1989fast} and the virtual space subjected to the Sano procedure\cite{sano2000elementary} to obtain the corresponding antibonding orbitals. These resulting orbitals were similarly optimized by active-active rotations in an MCSCF manner, using $5\times 10^5$ ASCI determinants\cite{levine2020casscf}. The optimized localized orbitals yielded significantly lower variational energies for a given size of ASCI wave function, although inclusion of PT2 resulted in values quite similar with those obtained from delocalized orbitals (as can be seen from Table \ref{tab:ascidata} and  Figure \ref{asci_SI_fig}). The lower magnitude of PT2 corrections nonetheless suggest that the localized orbital ASCI values are more reliable, especially with respect to extrapolation (by virtue of being closer to the $E_{PT2}\to 0$ limit). Extrapolation of the localized orbitals to the $E_{PT2}\to 0$ yields a correlation energy of -861.3$\pm$ 0.5 m$E_{\text{H}}$. 
+
+It is however worth noting that this localized orbital result is essentially outside the range estimated from the original delocalized case (-860.0 $\pm$ 0.2 m$E_{\text{H}}$). This, in conjunction with the relatively low magnitude of correlation energy predicted by ASCI relative to other methods, indicates that the extrapolated ASCI error bar estimate is much too small in this case. This is likely a consequence of the stubbornly large $E_{PT2}$ values for the variational subspace sizes considered (as can be seen from Table \ref{tab:ascidata}), which likely prevents attainment of the asymptotic $E_{PT2}\to 0$ regime behavior for the extrapolation (despite $r^2$ of the linear fit being very close to 1, which is the origin of the too small error bars). It is however also worth noting that the extrapolation protocol nonetheless is quite effective, recovering $\sim$ -25/-26 m$E_{\text{H}}$ of the $\sim$ -28 m$E_{\text{H}}$ correlation not recovered by ASCI+PT2 alone (assuming an actual correlation energy of $\sim$ -863 m$E_{\text{H}}$). More reliable estimates from ASCI+PT2 would require larger variational subspaces than those studied in this work. Our original choice was partly determined by code limitations, though we considered $5\times 10^6$ determinants to be sufficient at the time of the blind challenge. 
+
+\begin{table}[]
+	\begin{tabular}{llll|llll}
+		\multicolumn{4}{l}{Delocalized Orbitals (original blind test)} & \multicolumn{4}{l}{Localized orbitals}             \\\hline
+		$N_\text{dets}$      & $E_{\mathrm{c}}^{\mathrm{var}}$    & $E_{\mathrm{c}}^{\mathrm{PT2}}$      & $E_{\mathrm{c}}^{\mathrm{var+PT2}}$    & $N_\text{dets}$    & $E_{\mathrm{c}}^{\mathrm{var}}$ & $E_{\mathrm{c}}^{\mathrm{PT2}}$   & $E_{\mathrm{c}}^{\mathrm{var+PT2}}$ \\
+		$1\times10^5$  & -661.17        & -159.97    & -821.14            & $1\times10^5$ & -698.31     & -116.74 & -815.05         \\
+		$2.5\times10^5$    & -685.91        & -139.54    & -825.45            & $2.5\times10^5$ & -719.63     & -101.03 & -820.65         \\
+		$5\times10^5$    & -698.34        & -129.41    & -827.75            & $5\times10^5$ & -735.12     & -89.49  & -824.62         \\
+		$1\times10^6$    & -709.96        & -120.04    & -830.00            & $1\times10^6$ & -749.43     & -79.17  & -828.60         \\
+		$2\times10^6$    & -721.68        & -110.61    & -832.29            & $2\times10^6$ & -761.51     & -70.49  & -832.00         \\
+		$5\times10^5$    & -737.13        & -98.25     & -835.38            & $4\times10^5$ & -772.35     & -62.83  & -835.18         \\\hline 
+		Fit         &                &            & -860.0$\pm$0.2            & Fit      &             &         & -861.3$\pm$0.5       
+	\end{tabular}
+	\caption{Correlation energies  ($E_{\mathrm{c}}$, in m$E_{\text{H}}$) for ASCI wave functions with various number of determinants ($N_\text{dets}$).}
+	\label{tab:ascidata}
+\end{table}
+
+
+%All ASCI calculations were performed using {\color{red}{what code???}} in parallel on AMD EPYC 7401 hardware (24 cores $@$ 2.0 GHz, {\color{red}{XX}} GB/core). The computed ASCI results are presented in Figure \ref{asci_SI_fig}, and the final extrapolated correlation energy is estimated to be $\Delta E_{\text{ASCI}} = -859.97\pm0.2$ m$E_{\text{H}}$ with the error bar spanned by the uncertainty in the extrapolation towards the limit of zero PT2 correction (standard deviation of a linear fit with last 3 points).
 
 \section{iCI}
 
@@ -552,7 +579,7 @@ The CCSDTQ~\cite{ccsdtq_paper_1_jcp_1991,ccsdtq_paper_2_jcp_1992} correlation en
 %
 \begin{table}[ht!]
 \begin{center}
-\caption{Cluster decomposition ($L_2$-norm) of a 5M-determinant ASCI wave function for excitation levels $1 \leq n \leq 6$.}
+\caption{Cluster decomposition ($L_2$-norm) of a 5M-determinant ASCI wave function (with delocalized orbitals) for excitation levels $1 \leq n \leq 6$.}
 \label{cluster_decomp_SI_table}
 \begin{tabular}{l|r|r|r}
 \toprule
@@ -570,7 +597,31 @@ The CCSDTQ~\cite{ccsdtq_paper_1_jcp_1991,ccsdtq_paper_2_jcp_1992} correlation en
 \end{center}
 \end{table}
 %
-Table \ref{cluster_decomp_SI_table} presents results for a cluster decomposition~\cite{lehtola_head_gordon_fci_decomp_jcp_2017} of an ASCI wave function with $\num{5.e6}$ determinants. These results indicate how most of the $\{\bm{c}_4\}$ CI coefficients comes from disconnected terms and ditto for higher-order excitations. 
+Table \ref{cluster_decomp_SI_table} presents results for a cluster decomposition~\cite{lehtola_head_gordon_fci_decomp_jcp_2017} of an ASCI wave function with $\num{5.e6}$ determinants (using delocalized orbitals, as described in Sec \ref{sec:asci}). These results indicate how most of the $\{\bm{c}_4\}$ (and higher order) CI coefficients comes from disconnected terms.  
+
+
+Subsequent to the main study, a cluster decomposition was also carried out on a $\num{4.e6}$ determinant ASCI wave function with localized orbitals (as described in Sec \ref{sec:asciloc}), as this CI wave function had a lower variational energy than the previous one (-772 m$E_{\text{H}}$ correlation vs -737 m$E_{\text{H}}$) and was thus a better approximation to the true FCI wave function. The resulting values are provided in Table \ref{cluster_decomp_SI_table2}, which differ slightly from those in Table \ref{cluster_decomp_SI_table}. The general picture however remains the same, in that $\{\bm{c}_4\}$ and higher order excitations seem to mostly arise from disconnected terms. 
+
+\begin{table}[ht!]
+	\begin{center}
+		\caption{Cluster decomposition ($L_2$-norm) of a 4M-determinant ASCI wave function (with localized orbitals) for excitation levels $1 \leq n \leq 6$.}
+		\label{cluster_decomp_SI_table2}
+		\begin{tabular}{l|r|r|r}
+			\toprule
+			\multicolumn{1}{c|}{$n$} & \multicolumn{1}{c|}{$|\bm{c}_n|$} & \multicolumn{1}{c|}{$|\bm{t}_n|$} & \multicolumn{1}{c}{Ratio/$\%$} \\
+			\midrule\midrule
+			1&	$0.01777$ &	$0.01777$&	$100.0$\\
+			2&	$0.55063$ &	$0.55063$&	$100.0$\\
+			3&	$0.06855$ &	$0.06868$&	$100.2$\\
+			4&	$0.16486$ &	$0.01755$&	$10.65$\\
+			5&	$0.00903$ &	$0.00076$&	$8.38$\\
+			6&	$0.01610$ &	$0.00259$&	$16.11$\\
+			\midrule
+		\end{tabular}
+		\vspace{-0.6cm}
+	\end{center}
+\end{table}
+
 
 \newpage
 

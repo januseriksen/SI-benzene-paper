@@ -10,6 +10,8 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator, FormatStrFormatter
 import seaborn as sns
 
+PALETTE = sns.color_palette('Set2')
+
 HF = -230.721819
 
 dets = np.array([
@@ -21,22 +23,50 @@ dets = np.array([
 5000000
 ])
 
-e_var = np.array([
--231.38299,
--231.40772,
--231.42016,
--231.43178,
--231.44350,
--231.45895
+e_cvar = np.array([
+-661.17,
+-685.91,
+-698.34,
+-709.96,
+-721.68,
+-737.13
 ])
 
-e_tot = np.array([
--231.542957,
--231.547269,
--231.549569,
--231.551819,
--231.554105,
--231.557199
+e_ctot = np.array([
+-821.14,
+-825.45,
+-827.75,
+-830.00  ,
+-832.29 ,
+-835.38
+])
+
+
+dets_updated = np.array([
+100000,
+250000,
+500000,
+1000000,
+2000000,
+4000000
+])
+
+e_cvar_updated = np.array([
+-698.31,
+-719.63,
+-735.12,
+-749.43,
+-761.51,
+-772.35
+])
+
+e_ctot_updated = np.array([
+-815.05,
+-820.65,
+-824.62,
+ -828.60  ,
+-832.00 ,
+-835.18
 ])
 
 # set seaborn
@@ -46,9 +76,10 @@ sns.set(style='darkgrid', palette='Set2', font='DejaVu Sans')
 fig, ax = plt.subplots()
 
 # plot results
-ax.semilogx(dets, (e_var - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='-', label='$E_{{\mathrm{var}}}$')
-ax.semilogx(dets, (e_tot - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='-', label='$E_{{\mathrm{var+PT2}}}$')
-
+ax.semilogx(dets, e_cvar, marker='x', linewidth=2, mew=1, linestyle='-', label='$E_{\mathrm{c}}^{\mathrm{var}}$')
+ax.semilogx(dets_updated, e_cvar_updated, marker='x', linewidth=2, mew=1, linestyle='--', color=PALETTE[0])
+ax.semilogx(dets, e_ctot, marker='x', linewidth=2, mew=1, linestyle='-', label='$E_{\mathrm{c}}^{\mathrm{var+PT2}}$')
+ax.semilogx(dets_updated, e_ctot_updated, marker='x', linewidth=2, mew=1, linestyle='--', color=PALETTE[1])
 # turn off x-grid
 ax.xaxis.grid(False)
 
