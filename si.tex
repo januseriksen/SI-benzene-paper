@@ -217,7 +217,7 @@ replicated data on the cores. We used the standard procedures described in Ref.~
 maximum bond dimension of $M=7000$, then the backward schedule was carried out to obtain fully converged results for extrapolation back down to $M=1000$.
 We obtained our initial integral file from the Umrigar group for the blind challenge and used these for the DMRG calculations.
 As we found out subsequently, the integral file corresponded to optimized SHCI orbitals. As this makes the results more complicated to reproduce,
-we provide the full integral file at \url{...}. We also
+we provide the full integral file at \url{https://github.com/seunghoonlee89/SI-benzene-paper-DMRG}. We also
 verified on some smaller runs that using CCSD natural orbitals gave similar energies. The results from the backwards schedule of DMRG are listed in table~\ref{tab:DMRG_reverse}.
 
 \begin{table}[ht]
@@ -237,8 +237,8 @@ $E$ & $-844.9$ 		   & $-852.9$  		  & $-855.9$ 		 & $-857.5$ 		& $-858.5$ 		& $-
 
 DMRG yields two separate results: a variational upper bound and an extrapolated number based on the different bond dimensions.
 The lowest variational correlation energy is $\Delta E_{\text{DMRG(var)}} = -859.5$ m$E_{\text{H}}$ corresponding to the 
-  $M=7000$ result from the partially converged forwards schedule. The linear extrapolation was based on using the fully converged backwards schedule results for $M=6000$ to {\color{red}$M=1000$} (the
-variational $M=6000$ result was {\color{red} $-859.2$ m$E_{\text{H}}$}) giving a final number of
+  $M=7000$ result from the partially converged forwards schedule. The linear extrapolation was based on using the fully converged backwards schedule results for $M=6000$ to $M=1000$ (the
+variational $M=6000$ result was $-859.2$ m$E_{\text{H}}$) giving a final number of
 $\Delta E_{\text{DMRG}(\infty)} = -862.8$ m$E_{\text{H}}$, cf. Figure \ref{dmrg_SI_fig}.
 %% The lowest variational , while the extrapolated result (infinite bond dimension estimate) is $\Delta E_{\text{DMRG}(\infty)} = -862.8$ m$E_{\text{H}}$,
 The standard practice in DMRG for estimating an error from the extrapolation is to report a fraction of the extrapolation distance, typically 1/5.
