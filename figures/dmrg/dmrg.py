@@ -7,7 +7,7 @@ matplotlib.use('Agg')
 matplotlib.rcParams['font.family'] = 'sans-serif'
 matplotlib.rcParams['font.sans-serif'] = ['DejaVu Sans']
 import matplotlib.pyplot as plt
-from matplotlib.ticker import MaxNLocator, FormatStrFormatter
+from matplotlib.ticker import MaxNLocator, FormatStrFormatter, MultipleLocator
 import seaborn as sns
 
 HF = -230.721819
@@ -30,6 +30,12 @@ e = np.array([
 -231.5810
 ])
 
+# extrapolation
+coef = np.polyfit(w, (e - HF) * 1000., 1)
+f = np.poly1d(coef) 
+w_extrap = np.array([0.0, 5.272e-05])
+e_extrap = f(w_extrap)
+
 # set seaborn
 sns.set(style='darkgrid', palette='Set2', font='DejaVu Sans')
 
@@ -37,7 +43,8 @@ sns.set(style='darkgrid', palette='Set2', font='DejaVu Sans')
 fig, ax = plt.subplots()
 
 # plot results
-ax.plot(w, (e - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='-', label='$E_{{\mathrm{DMRG}}}$')
+ax.scatter(w, (e - HF) * 1000., marker ='s', s=20, linewidths=1, color="none", edgecolor=sns.color_palette("Set2")[0], label='$E_{{\mathrm{DMRG}}}$')
+ax.plot(w_extrap, e_extrap, linewidth=0.5, dashes=[6,2], linestyle='-') 
 
 # turn off x-grid
 ax.xaxis.grid(False)
@@ -46,8 +53,13 @@ ax.xaxis.grid(False)
 ax.set_xlabel('Discarded Weight')
 ax.set_ylabel('Total Correlation Energy (in m$E_{{\mathrm{H}}}$)')
 
-# x-axis format
-ax.xaxis.set_major_formatter(FormatStrFormatter('%.1e'))
+# x-axis, y-axis format
+ax.set_xlim([0,6e-5])
+ax.xaxis.set_major_formatter(FormatStrFormatter('%.0e'))
+ax.xaxis.set_ticks(np.arange(0, 7e-5, 1e-5))
+ax.set_ylim([-863,-843])
+ax.yaxis.set_major_formatter(FormatStrFormatter('%d'))
+ax.yaxis.set_ticks(np.arange(-863, -839, 4))
 
 # despine
 sns.despine()
