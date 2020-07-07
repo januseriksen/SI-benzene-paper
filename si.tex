@@ -212,14 +212,13 @@ In the course of preparing the code for running high-accuracy MBE-FCI calculatio
 \section{DMRG}
 
 For details on DMRG theory, please see a number of contemporary reviews on the topic~\cite{chan_dmrg_2011,wouters_dmrg_2014,knecht_dmrg_2016}. All DMRG calculations were performed using an unmodified version of the {\texttt{BLOCK}} code (v1.5)~\cite{chan_head_gordon_dmrg_jcp_2002,chan_dmrg_jcp_2004,chan_polyacetylenes_jcp_2008,sharma_chan_dmrg_2012,chan_dmrg_2015}, executed through the {\texttt{PySCF}} program~\cite{pyscf_prog,pyscf_paper,pyscf_arxiv_2020}, on Intel Xeon CPU E5-2680v4 (28-36 cores $@$ 2.4 GHz, 9.85 GB/core) and Xeon Gold 6130 (32 cores $@$ 2.1 GHz, 6.0 GB/core) nodes. Calculations
-  were run in parallel on 100-200 cores. Maximum total memory usage was estimated at 1.15 Tb in total across all cores; this included
-some amount of replicated data on the cores. We used the standard procedures described in Ref.~\cite{chan_dmrg_2015}, including (i) Edminston-Ruedenberg split-localization of orbitals (ii) use
-of the genetic algorithm option in \texttt{BLOCK} to order the orbitals. The forward schedule was carried out up to a
-maximum bond dimension of $M=7000$, then the backward schedule was carried out to obtain fully converged results for extrapolation back down to {\color{red} $M=1000$}.
-We obtained our initial integral file from the Umrigar group for the blind challenge, and these corresponded to orbitals optimized
-for the SHCI energy, which we used for the DMRG calculations. However, we verified after the completion of our calculations on some
-smaller runs that using CCSD natural orbitals gave {\color{red} no meaningful difference in the results less than 2 m$E_{\text{H}}$ at $M=2000$}, this
- only decreases as $M$ is increased. The results from the backwards schedule of DMRG are listed in table~\ref{tab:DMRG_reverse}.
+  were run in parallel on 100-200 cores. Maximum total memory usage was estimated at 1.15 Tb in total across all cores; this includes
+replicated data on the cores. We used the standard procedures described in Ref.~\cite{chan_dmrg_2015}, including (i) Edminston-Ruedenberg split-localization of orbitals (ii) use of the genetic algorithm option in \texttt{BLOCK} to order the orbitals. The forward schedule was carried out up to a
+maximum bond dimension of $M=7000$, then the backward schedule was carried out to obtain fully converged results for extrapolation back down to $M=1000$.
+We obtained our initial integral file from the Umrigar group for the blind challenge and used these for the DMRG calculations.
+As we found out subsequently, the integral file corresponded to optimized SHCI orbitals. As this makes the results more complicated to reproduce,
+we provide the full integral file at \url{...}. We also
+verified on some smaller runs that using CCSD natural orbitals gave very similar energies. The results from the backwards schedule of DMRG are listed in table~\ref{tab:DMRG_reverse}.
 
 \begin{table}[ht]
 \begin{center}
