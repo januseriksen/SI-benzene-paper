@@ -44,7 +44,7 @@ fig, ax = plt.subplots()
 
 # plot results
 ax.scatter(w, (e - HF) * 1000., marker ='s', s=20, linewidths=1, color="none", edgecolor=sns.color_palette("Set2")[0], label='$E_{{\mathrm{DMRG}}}$')
-ax.plot(w_extrap, e_extrap, linewidth=0.5, dashes=[6,2], linestyle='-') 
+ax.plot(w_extrap, e_extrap, linewidth=2, dashes=[6,2], linestyle='-') 
 
 # turn off x-grid
 ax.xaxis.grid(False)
