@@ -39,7 +39,7 @@
 \email{janus.eriksen@bristol.ac.uk}
 \affiliation{School of Chemistry, University of Bristol, Cantock's Close, Bristol BS8 1TS, United Kingdom}
 %
-\author{Tyler Anderson}
+\author{Tyler A. Anderson}
 \affiliation{Laboratory of Atomic and Solid State Physics, Cornell University, Ithaca, New York 14853, USA}
 \author{J. Emiliano Deustua}
 \affiliation{Department of Chemistry, Michigan State University, East Lansing, MI 48824, USA}
@@ -93,7 +93,7 @@
 \author{Seiichiro L. Ten-no}
 \email{tenno@garnet.kobe-u.ac.jp}
 \affiliation{Graduate School of Science, Technology, and Innovation, Kobe University, 1-1 Rokkodai-cho, Nada-ku, Kobe 657-8501, Japan}
-\author{Cyrus J. Umrigar}
+\author{C. J. Umrigar}
 \email{cyrusumrigar@gmail.com}
 \affiliation{Laboratory of Atomic and Solid State Physics, Cornell University, Ithaca, New York 14853, USA}
 \author{J{\"u}rgen Gauss}
@@ -167,7 +167,7 @@ FCCR & $-863.0$ \\
 MBE-FCI & $-863.0$ \\
 CAD-FCIQMC & $-863.4$ \\
 AS-FCIQMC & $-863.7$ \\
-SHCI & $-864.3$ \\
+SHCI & $-864.2$ \\
 \midrule
 \end{tabular}
 \vspace{-1.4cm}
@@ -288,7 +288,127 @@ All CAD-FCIQMC results are presented in Table \ref{cad_fciqmc_SI_table}. To a fi
 
 \section{SHCI}
 
-For details on the most recent version of SHCI theory, please see Ref. \citenum{li_sharma_umrigar_heat_bath_ci_jcp_2018}. All SHCI calculations were performed using the {\texttt{Arrow}} code~\cite{arrow} in parallel {\color{red}{on what hardware???}} ({\color{red}{XX}} cores $@$ {\color{red}{XX}} GHz, {\color{red}{XX}} GB/core). The computed SHCI results are presented in {\color{red}{Fig. \ref{shci_SI_fig} (Cyrus and Sandeep, can you please forward me information that would allow me to make a figure similar to Figs. \ref{asci_SI_fig} and \ref{ici_SI_fig}?)}}, and the final extrapolated correlation energy is estimated to be $\Delta E_{\text{SHCI}} = -864.3\pm1.5$ m$E_{\text{H}}$ with the error bar {\color{red}{derived how???}}.
+For details of the current version of SHCI theory, please see Refs. \citenum{LiYaoHolOttShaUmr-PRR-20,YaoGinLiTouUmr-ARX-20} and references therein.
+%%li_sharma_umrigar_heat_bath_ci_jcp_2018}.
+%All SHCI calculations were performed using the {\texttt{Arrow}} code~\cite{arrow} in parallel {\color{red}{on what hardware???}} ({\color{red}{XX}} cores $@$ {\color{red}{XX}} GHz, {\color{red}{XX}} GB/core).
+%% The computed SHCI results are presented in {\color{red}{Fig. \ref{shci_SI_fig} (Cyrus and Sandeep, can you please forward me information that would allow me to make a figure similar to Figs. \ref{asci_SI_fig} and \ref{ici_SI_fig}?)}}, and the final extrapolated correlation energy is estimated to be $\Delta E_{\text{SHCI}} = -864.2\pm1.5$ m$E_{\text{H}}$ with the error bar {\color{red}{derived how???}}.
+
+SHCI, in common with other selected configuration interaction plus perturbation theory (SCI+PT)
+methods has two stages.
+In the first stage a variational wavefunction is constructed iteratively, starting from
+a determinant that is expected to have a significant amplitude in the final wavefunction.
+The number of determinants in the variational wavefunction is controlled by a parameter $\epsilon_1$.
+In the second stage, 2$^{\rm nd}$-order Epstein-Nesbet perturbation theory is used to improve upon the variational energy.
+The number of determinants used to compute the perturbative correction is controlled by a second
+parameter $\epsilon_2$, which is chosen in this study to be $\epsilon_2 = 10^{-3} \times \epsilon_1$.
+The total energy (sum of the variational energy and the perturbative correction) is computed at several values of
+$\epsilon_1$ and extrapolated to $\epsilon_1 \to 0$ to obtain an estimate for the full configuration interaction (FCI) energy.
+
+The convergence of the SHCI variational and total energies with respect to the number of determinants
+depends on the choice of orbitals.
+The simplest choice, Hartree-Fock orbitals, typically give slow convergence.  Natural orbitals,
+obtained from SHCI, give faster convergence, and orbitals optimized within SHCI to minimize
+the variational energy at some fairly large value of $\epsilon_1$ give yet faster convergence.
+For molecules with more than a few atoms, split-localized optimized orbitals give faster convergence
+than delocalized optimized orbitals.
+In this study we used split-localized optimized orbitals constructed using the methods described in
+Ref. \citenum{YaoGinLiTouUmr-ARX-20}.
+The value of $\epsilon_1$ used in the optimization was $2 \times 10^{-3}$ m$E_{\text{H}}$ for the blind test,
+and $1 \times 10^{-4}$ m$E_{\text{H}}$ for the subsequent improved calculations.
+
+The final energy is obtained by a weighted fit of the total energies to a quadratic function of the perturbative correction,
+as shown in Fig.~\ref{fig:shci_energy_blind} for the calculation submitted for the blind test, and
+in Fig.~\ref{fig:shci_energy_later} for the subsequent calculation that used better optimized orbitals
+and smaller values of $\epsilon_1$.  The weight function used is the inverse square of the perturbative correction.
+Table~\ref{shci_energies} shows the same information in greater detail, including also the values of $\epsilon_1$ used
+and the number of time-reversal symmetrized determinants and the number of determinants.
+Our largest calculation included $5.4 \times 10^8$ determinants.
+
+The total energy provided for the blind test, -231.5861 $E_{\text{H}}$ was the value from the 7-point weighted
+quadratic fit shown in Table~\ref{shci_energies} along with a conservative estimate for
+the extrapolation error of 0.0015 $E_{\text{H}}$, which is almost an order of magnitude
+larger than the fit error.  This corresponds to a correlation energy of 864.2 m$E_{\text{H}}$.
+In contrast to the statistical error, which has a well-defined probabilistic meaning, there is no well
+defined method for estimating the extrapolation error and different groups report wildly different estimates
+even when the underlying calculations are similar.
+In light of our subsequent calculations using better optimized orbitals and going down to smaller values
+of $\epsilon_1$, we could have gotten a slightly more accurate energy estimate of $-231.5856 E_{\text{H}}$ using
+the 5-point fit.
+Although the extrapolation curve is nearly linear, when sufficiently many data points are available, it
+is appropriate to perform a fit with a higher-order polynomial.  The reduced chi-squared statistic can be
+used to avoid overfitting.  A weighted cubic fit of either data set of data, using all the data points for that set,
+gives a total energy of $-231.5851 E_{\text{H}}$, corresponding to a correlation energy of
+$-863.3$ m$E_{\text{H}}$.  This should be considered to be the best post blind test SHCI estimate.
+Note that all the extrapolation estimates in this paragraph are well within the estimated error provided with the blind test.
+
+All calculations were performed using the {\texttt{Arrow}} code~\cite{arrow}.
+For the blind test runs, the calculations shown in Table~\ref{shci_energies} for $\epsilon_1 = 2 \times 10^{-4},\; 1 \times 10^{-4},\; 5 \times 10^{-5}$ and $2 \times 10^{-5}$
+took in total 13 hours on four Intel(R) Xeon(R) Silver-4110 nodes, running at 2.1 GHz, each with 16 physical cores and 384 GB of RAM, and,
+the calculations for $\epsilon_1 = 1 \times 10^{-5}$ and $8 \times 10^{-6}$ took in total 49 hours
+on one Intel Xeon E7-8870v4 node, running at 2.1 GHz, with 40 physical cores and 3TB of RAM.
+
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=1.0]{figures/shci/energy_conv_C6H6_3a.eps}
+\caption{Convergence plot of SHCI total energies for the partially optimized orbitals used in the blind test.
+The lines are weighted quadratic fits, using varying number of points with the smallest $E_{\rm var}-E_{\rm tot}$ values.}
+\label{fig:shci_energy_blind}
+\end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\includegraphics[scale=1.0]{figures/shci/energy_conv_C6H6_3b.eps}
+\caption{Convergence plot of SHCI total energies for further optimized orbitals and smaller $\epsilon_1$ values.
+The lines are weighted quadratic fits, using varying number of points with the smallest $E_{\rm var}-E_{\rm tot}$ values.}
+\label{fig:shci_energy_later}
+\end{center}
+\end{figure}
+
+
+\begin{table}[htbp]
+\begin{center}
+\caption{SHCI variational and total energy convergence.  The top block of the table is for the
+partially optimized orbitals used in the blind test, whereas the bottom block is for further optimized orbitals
+and a smaller values of $\epsilon_1$.  The errors in the total energies, $E_{\rm tot}$, for finite values of $\epsilon_1$ are
+statistical errors.  These are negligible, particularly for the smaller $\epsilon_1$ values.
+The errors in $E_{\rm tot}$ extrapolated to $\epsilon_1=0$ are fit errors
+which typically greatly underestimate the actual extrapolation error.  The energy reported in the blind test was that from the
+7-point fit, with a conservative estimate of the extrapolation error which is almost an order of magnitude larger
+than the fit error.}
+\label{shci_energies}
+\begin{tabular}{rrrll}
+\toprule
+%\multicolumn{1}{c|}{Method} & \multicolumn{1}{c}{$\Delta E$/m$E_{\text{H}}$} \\
+\multicolumn{1}{c}{$\epsilon_1$} & \multicolumn{1}{c}{$N^{\rm sym}_{\rm det}$} & \multicolumn{1}{c}{$N_{\rm det}$} & \multicolumn{1}{c}{$E_{\rm var}$} & \multicolumn{1}{c}{$E_{\rm tot}$} \\
+\midrule
+$2.0 \times 10^{-4}$ &      579\,708 &   1\,134\,081 & -231.468\,564   & -231.550\,787 $\pm$ 0.000\,010 \\
+$1.0 \times 10^{-4}$ &   1\,975\,676 &   3\,901\,848 & -231.491\,252   & -231.557\,309 $\pm$ 0.000\,010 \\
+$5.0 \times 10^{-5}$ &   6\,790\,526 &  13\,486\,304 & -231.511\,826   & -231.563\,444 $\pm$ 0.000\,007 \\
+$2.0 \times 10^{-5}$ &  32\,178\,640 &  64\,100\,382 & -231.533\,720   & -231.570\,044 $\pm$ 0.000\,005 \\
+$1.5 \times 10^{-5}$ &  51\,218\,692 & 102\,088\,555 & -231.539\,142   & -231.571\,697 $\pm$ 0.000\,005 \\
+$1.0 \times 10^{-5}$ &  97\,754\,454 & 194\,977\,798 & -231.545\,790   & -231.573\,686 $\pm$ 0.000\,003 \\
+$8.0 \times 10^{-6}$ & 138\,641\,259 & 276\,617\,654 & -231.548\,984   & -231.574\,641 $\pm$ 0.000\,003 \\
+Extrap. using 7 pts. &&&                               -231.586\,064   & -231.586\,064 $\pm$ 0.000\,160 \\
+Extrap. using 6 pts. &&&                               -231.585\,772   & -231.585\,772 $\pm$ 0.000\,120 \\
+Extrap. using 5 pts. &&&                               -231.585\,569   & -231.585\,569 $\pm$ 0.000\,143 \\
+\midrule
+$1.0 \times 10^{-4}$ &   1\,914\,692 &   3\,780\,337 & -231.497\,568   & -231.558\,399 $\pm$ 0.000\,010 \\
+$5.0 \times 10^{-5}$ &   6\,410\,037 &  12\,722\,141 & -231.516\,872   & -231.564\,290 $\pm$ 0.000\,006 \\
+$2.0 \times 10^{-5}$ &  29\,787\,396 &  59\,310\,339 & -231.537\,074   & -231.570\,545 $\pm$ 0.000\,006 \\
+$1.5 \times 10^{-5}$ &  47\,463\,030 &  94\,569\,745 & -231.542\,155   & -231.572\,140 $\pm$ 0.000\,006 \\
+$1.0 \times 10^{-5}$ &  90\,601\,302 & 180\,662\,587 & -231.548\,415   & -231.574\,081 $\pm$ 0.000\,002 \\
+$5.0 \times 10^{-6}$ & 268\,931\,930 & 536\,792\,289 & -231.557\,059   & -231.576\,736 $\pm$ 0.000\,002 \\
+Extrap. using 6 pts. &&&                               -231.585\,609   & -231.585\,609 $\pm$ 0.000\,104 \\
+Extrap. using 5 pts. &&&                               -231.585\,464   & -231.585\,464 $\pm$ 0.000\,105 \\
+\midrule
+\end{tabular}
+\end{center}
+\end{table}
+
+\clearpage
+
 
 \section{ASCI}
 \label{sec:asci}
