@@ -89,7 +89,7 @@
 \alsoaffiliation{Department of Physics and Astronomy, Michigan State University, East Lansing, MI 48824, USA}
 \author{Sandeep Sharma}
 \email{sandeep.sharma@colorado.edu}
-\affiliation{Department of Chemistry and Biochemistry, The University of Colorado at Boulder, Boulder, Colorado 80302, USA}
+\affiliation{Department of Chemistry, The University of Colorado at Boulder, Boulder, Colorado 80302, USA}
 \author{Seiichiro L. Ten-no}
 \email{tenno@garnet.kobe-u.ac.jp}
 \affiliation{Graduate School of Science, Technology, and Innovation, Kobe University, 1-1 Rokkodai-cho, Nada-ku, Kobe 657-8501, Japan}
@@ -288,86 +288,25 @@ All CAD-FCIQMC results are presented in Table \ref{cad_fciqmc_SI_table}. To a fi
 
 \section{SHCI}
 
-For details of the current version of SHCI theory, please see Refs. \citenum{LiYaoHolOttShaUmr-PRR-20,YaoGinLiTouUmr-ARX-20} and references therein.
-%%li_sharma_umrigar_heat_bath_ci_jcp_2018}.
-%All SHCI calculations were performed using the {\texttt{Arrow}} code~\cite{arrow} in parallel {\color{red}{on what hardware???}} ({\color{red}{XX}} cores $@$ {\color{red}{XX}} GHz, {\color{red}{XX}} GB/core).
-%% The computed SHCI results are presented in {\color{red}{Fig. \ref{shci_SI_fig} (Cyrus and Sandeep, can you please forward me information that would allow me to make a figure similar to Figs. \ref{asci_SI_fig} and \ref{ici_SI_fig}?)}}, and the final extrapolated correlation energy is estimated to be $\Delta E_{\text{SHCI}} = -864.2\pm1.5$ m$E_{\text{H}}$ with the error bar {\color{red}{derived how???}}.
+For details of the current version of SHCI theory, please see Refs. \citenum{sharma_umrigar_heat_bath_ci_prr_2020} and \citenum{toulouse_umrigar_heat_bath_ci_arxiv_2020} as well as references therein. SHCI, in common with other selected configuration interaction plus perturbation theory (SCI+PT) methods has two stages. In the first stage a variational wave function is constructed iteratively, starting from a determinant that is expected to have a significant amplitude in the final wave function. The number of determinants in the variational wavefunction is controlled by a parameter $\epsilon_1$. In the second stage, second-order Epstein-Nesbet perturbation theory is used to improve upon the variational energy. The number of determinants used to compute the perturbative correction is controlled by a second parameter $\epsilon_2$, which is chosen in this study to be $\epsilon_2 = \num{1.e-3} \times \epsilon_1$. The total energy (sum of the variational energy and the perturbative correction) is computed at several values of $\epsilon_1$ and extrapolated to $\epsilon_1 \to 0$ to obtain an estimate for the full configuration interaction (FCI) energy.\\
 
-SHCI, in common with other selected configuration interaction plus perturbation theory (SCI+PT)
-methods has two stages.
-In the first stage a variational wavefunction is constructed iteratively, starting from
-a determinant that is expected to have a significant amplitude in the final wavefunction.
-The number of determinants in the variational wavefunction is controlled by a parameter $\epsilon_1$.
-In the second stage, 2$^{\rm nd}$-order Epstein-Nesbet perturbation theory is used to improve upon the variational energy.
-The number of determinants used to compute the perturbative correction is controlled by a second
-parameter $\epsilon_2$, which is chosen in this study to be $\epsilon_2 = 10^{-3} \times \epsilon_1$.
-The total energy (sum of the variational energy and the perturbative correction) is computed at several values of
-$\epsilon_1$ and extrapolated to $\epsilon_1 \to 0$ to obtain an estimate for the full configuration interaction (FCI) energy.
+The convergence of the SHCI variational and total energies with respect to the number of determinants depends on the choice of orbitals. The simplest choice, Hartree-Fock orbitals, typically give slow convergence. Natural orbitals, obtained from SHCI, give faster convergence, and orbitals optimized within SHCI to minimize the variational energy at some fairly large value of $\epsilon_1$ give yet faster convergence. For molecules with more than a few atoms, split-localized optimized orbitals give faster convergence than delocalized optimized orbitals. In this study we used split-localized optimized orbitals constructed using the methods described in Ref. \citenum{toulouse_umrigar_heat_bath_ci_arxiv_2020}. The value of $\epsilon_1$ used in the optimization was $\num{2.e-3}$ m$E_{\text{H}}$ for the blind test, and $\num{1.e-4}$ m$E_{\text{H}}$ for the subsequent improved calculations.\\
 
-The convergence of the SHCI variational and total energies with respect to the number of determinants
-depends on the choice of orbitals.
-The simplest choice, Hartree-Fock orbitals, typically give slow convergence.  Natural orbitals,
-obtained from SHCI, give faster convergence, and orbitals optimized within SHCI to minimize
-the variational energy at some fairly large value of $\epsilon_1$ give yet faster convergence.
-For molecules with more than a few atoms, split-localized optimized orbitals give faster convergence
-than delocalized optimized orbitals.
-In this study we used split-localized optimized orbitals constructed using the methods described in
-Ref. \citenum{YaoGinLiTouUmr-ARX-20}.
-The value of $\epsilon_1$ used in the optimization was $2 \times 10^{-3}$ m$E_{\text{H}}$ for the blind test,
-and $1 \times 10^{-4}$ m$E_{\text{H}}$ for the subsequent improved calculations.
-
-The final energy is obtained by a weighted fit of the total energies to a quadratic function of the perturbative correction,
-as shown in Fig.~\ref{fig:shci_energy_blind} for the calculation submitted for the blind test, and
-in Fig.~\ref{fig:shci_energy_later} for the subsequent calculation that used better optimized orbitals
-and smaller values of $\epsilon_1$.  The weight function used is the inverse square of the perturbative correction.
-Table~\ref{shci_energies} shows the same information in greater detail, including also the values of $\epsilon_1$ used
-and the number of time-reversal symmetrized determinants and the number of determinants.
-Our largest calculation included $5.4 \times 10^8$ determinants.
-
-The total energy provided for the blind test, -231.5861 $E_{\text{H}}$ was the value from the 7-point weighted
-quadratic fit shown in Table~\ref{shci_energies} along with a conservative estimate for
-the extrapolation error of 0.0015 $E_{\text{H}}$, which is almost an order of magnitude
-larger than the fit error.  This corresponds to a correlation energy of 864.2 m$E_{\text{H}}$.
-In contrast to the statistical error, which has a well-defined probabilistic meaning, there is no well
-defined method for estimating the extrapolation error and different groups report wildly different estimates
-even when the underlying calculations are similar.
-In light of our subsequent calculations using better optimized orbitals and going down to smaller values
-of $\epsilon_1$, we could have gotten a slightly more accurate energy estimate of $-231.5856 E_{\text{H}}$ using
-the 5-point fit.
-Although the extrapolation curve is nearly linear, when sufficiently many data points are available, it
-is appropriate to perform a fit with a higher-order polynomial.  The reduced chi-squared statistic can be
-used to avoid overfitting.  A weighted cubic fit of either data set of data, using all the data points for that set,
-gives a total energy of $-231.5851 E_{\text{H}}$, corresponding to a correlation energy of
-$-863.3$ m$E_{\text{H}}$.  This should be considered to be the best post blind test SHCI estimate.
-Note that all the extrapolation estimates in this paragraph are well within the estimated error provided with the blind test.
-
-All calculations were performed using the {\texttt{Arrow}} code~\cite{arrow}.
-For the blind test runs, the calculations shown in Table~\ref{shci_energies} for $\epsilon_1 = 2 \times 10^{-4},\; 1 \times 10^{-4},\; 5 \times 10^{-5}$ and $2 \times 10^{-5}$
-took in total 13 hours on four Intel(R) Xeon(R) Silver-4110 nodes, running at 2.1 GHz, each with 16 physical cores and 384 GB of RAM, and,
-the calculations for $\epsilon_1 = 1 \times 10^{-5}$ and $8 \times 10^{-6}$ took in total 49 hours
-on one Intel Xeon E7-8870v4 node, running at 2.1 GHz, with 40 physical cores and 3TB of RAM.
-
-
-\begin{figure}[htbp]
+%
+\begin{figure}[ht!]
 \begin{center}
-\includegraphics[scale=1.0]{figures/shci/energy_conv_C6H6_3a.eps}
-\caption{Convergence plot of SHCI total energies for the partially optimized orbitals used in the blind test.
-The lines are weighted quadratic fits, using varying number of points with the smallest $E_{\rm var}-E_{\rm tot}$ values.}
-\label{fig:shci_energy_blind}
+\includegraphics[scale=0.75]{figures/shci/shci.pdf}
+\caption{SHCI results. Original results are plotted with solid lines, updated localized orbital results (not part of main study) are plotted with dashed lines.}
+\label{shci_SI_fig}
 \end{center}
+\vspace{-0.6cm}
 \end{figure}
+%
+The final energy is obtained by a weighted fit of the total energies to a quadratic function of the perturbative correction, as shown in Fig.~\ref{fig:shci_energy_blind} for the calculation submitted for the blind test, and in Fig.~\ref{fig:shci_energy_later} for the subsequent calculation that used better optimized orbitals and smaller values of $\epsilon_1$. The weight function used is the inverse square of the perturbative correction. Table~\ref{shci_energies} shows the same information in greater detail, including also the values of $\epsilon_1$ used
+and the number of time-reversal symmetrized determinants and the number of determinants. Our largest calculation included $\num{5.4e8}$ determinants.\\
 
-\begin{figure}[htbp]
-\begin{center}
-\includegraphics[scale=1.0]{figures/shci/energy_conv_C6H6_3b.eps}
-\caption{Convergence plot of SHCI total energies for further optimized orbitals and smaller $\epsilon_1$ values.
-The lines are weighted quadratic fits, using varying number of points with the smallest $E_{\rm var}-E_{\rm tot}$ values.}
-\label{fig:shci_energy_later}
-\end{center}
-\end{figure}
-
-
-\begin{table}[htbp]
+%
+\begin{table}[ht!]
 \begin{center}
 \caption{SHCI variational and total energy convergence.  The top block of the table is for the
 partially optimized orbitals used in the blind test, whereas the bottom block is for further optimized orbitals
@@ -406,6 +345,29 @@ Extrap. using 5 pts. &&&                               -231.585\,464   & -231.58
 \end{tabular}
 \end{center}
 \end{table}
+%
+The total energy provided for the blind test, $-231.5861$ $E_{\text{H}}$ was the value from the 7-point weighted quadratic fit shown in Table~\ref{shci_energies} along with a conservative estimate for the extrapolation error of $1.5$ m$E_{\text{H}}$, which is almost an order of magnitude larger than the fit error. This corresponds to a correlation energy of $-864.2$ m$E_{\text{H}}$. In contrast to the statistical error, which has a well-defined probabilistic meaning, there is no well defined method for estimating the extrapolation error and different groups report wildly different estimates even when the underlying calculations are similar. In light of our subsequent calculations using better optimized orbitals and going down to smaller values of $\epsilon_1$, we could have gotten a slightly more accurate energy estimate of $-231.5856$ $E_{\text{H}}$ using the 5-point fit. Although the extrapolation curve is nearly linear, when sufficiently many data points are available, it is appropriate to perform a fit with a higher-order polynomial. The reduced chi-squared statistic can be used to avoid overfitting. A weighted cubic fit of either data set of data, using all the data points for that set, gives a total energy of $-231.5851$ $E_{\text{H}}$, corresponding to a correlation energy of
+$-863.3$ m$E_{\text{H}}$. This should be considered to be the best non-blinded SHCI estimate. Note that all the extrapolation estimates in this paragraph are well within the estimated error provided with the blind test.\\
+
+All calculations were performed using the {\texttt{Arrow}} code~\cite{arrow}. For the blind test runs, the calculations shown in Table~\ref{shci_energies} for $\epsilon_1 = \num{2.e-4},\; \num{1.e-4},\; \num{5.e-5}$ and $\num{2.e-5}$ took in total 13 hours on four Intel(R) Xeon(R) Silver-4110 nodes (16 cores $@$ 2.1 GHz, 24 GB/core), and the calculations for $\epsilon_1 = \num{1.e-5}$ and $\num{8.e-6}$ took in total 49 hours on one Intel Xeon E7-8870v4 node (40 cores $@$ 2.1 GHz, 75 GB/core).
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[scale=1.0]{figures/shci/energy_conv_C6H6_3a.eps}
+\caption{Convergence plot of SHCI total energies for the partially optimized orbitals used in the blind test.
+The lines are weighted quadratic fits, using varying number of points with the smallest $E_{\rm var}-E_{\rm tot}$ values.}
+\label{fig:shci_energy_blind}
+\end{center}
+\end{figure}
+
+\begin{figure}[ht!]
+\begin{center}
+\includegraphics[scale=1.0]{figures/shci/energy_conv_C6H6_3b.eps}
+\caption{Convergence plot of SHCI total energies for further optimized orbitals and smaller $\epsilon_1$ values.
+The lines are weighted quadratic fits, using varying number of points with the smallest $E_{\rm var}-E_{\rm tot}$ values.}
+\label{fig:shci_energy_later}
+\end{center}
+\end{figure}
 
 \clearpage
 
