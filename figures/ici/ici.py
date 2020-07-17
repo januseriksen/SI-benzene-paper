@@ -172,7 +172,7 @@ fig, ax = plt.subplots()
 
 # plot results
 ax.semilogx(dets_hf, (e_var_hf - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='-', color=PALETTE[0], label='$E_{{\mathrm{var}}}$ (HF)')
-ax.semilogx(dets_hf_updated, (e_var_hf_updated - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='--', color=PALETTE[1])
+ax.semilogx(dets_hf_updated, (e_var_hf_updated - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='--', color=PALETTE[0])
 ax.semilogx(dets_hf, (e_tot_hf - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='-', color=PALETTE[1], label='$E_{{\mathrm{var+PT2}}}$ (HF)')
 ax.semilogx(dets_hf_updated, (e_tot_hf_updated - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='--', color=PALETTE[1])
 ax.semilogx(dets_no, (e_var_no - HF) * 1000., marker='x', linewidth=2, mew=1, linestyle='-', color=PALETTE[2], label='$E_{{\mathrm{var}}}$ (NO)')
