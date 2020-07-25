@@ -254,37 +254,454 @@ DMRG yields two separate results: a variational upper bound and an extrapolated 
 
 For details on the adaptive shift formalism, please see Ref. \citenum{ghanem_alavi_fciqmc_jcp_2019}. All AS-FCIQMC calculations were performed using the {\texttt{NECI}} code~\cite{neci,neci_jcp_2020} in parallel on Intel Xeon CPU E5-2698v4 nodes (40 cores $@$ 2.2 GHz, 6.4 GB/core). The orbitals used were those of a preceding RHF orbitals and the FCIQMC runs were performed in a basis of pure Slater determinants (no spin adaptation). Following an equilibration run with $\num{1.e8}$ walkers (yielding a correlation energy of $\Delta E_{\text{AS-FCIQMC(init)}} = -863.3\pm0.9$ m$E_{\text{H}}$), a first calculation with $\num{1.e9}$ (1B) walkers (growing from $\num{1.e8}$) yielded a correlation energy $\Delta E_{\text{AS-FCIQMC(1B)}} = -864.8\pm0.5$ m$E_{\text{H}}$. Next, a second calculation with $\num{2.e9}$ (2B) walkers (growing from $\num{1.e9}$) resulted in a correlation energy of $\Delta E_{\text{AS-FCIQMC(2B)}} = -863.7\pm0.3$ m$E_{\text{H}}$. The stochastic error bar of $0.3$ m$E_{\text{H}}$ is derived by averaging over the last 2637 time steps (discarding the first 5000 time steps for walker growth and equilibration period), and doing a blocking analysis. The AS‐FCIQMC(2B) result is used in Fig. 1 of the main study. For the largest AS-FCIQMC calculations (2B), the {\texttt{NECI}} code used 2.6 GB/core, i.e., 3162 Gb in total distributed over 32 nodes (40 cores/node).
 
+%%%%% PIECUCH's SECTION, 24 JULY 2020 %%%%%
+
 \section{CAD-FCIQMC}
+\label{cad_fciqmc_SI_sect}
 
-A CAD-FCIQMC calculation consists of three steps~\cite{piecuch_monte_carlo_cc_prl_2017,piecuch_monte_carlo_cc_jcp_2018,piecuch_monte_carlo_eom_cc_jcp_2019,piecuch_mg_dimer_sci_adv_2020}: {\bf{(i)}} a stochastic FCIQMC run to produce the wave function for the subsequent cluster analysis (information only needed of the CI wave function through the $\{\bm{c}_4\}$ coefficients), {\bf{(ii)}} a cluster analysis of the wave function to extract CC cluster amplitudes through $\{\bm{t}_4\}$, and {\bf{(iii)}} a CCSD-like calculation in which $\{\bm{t}_1,\bm{t}_2\}$ are deterministically computed in the presence of $\{\bm{t}_3,\bm{t}_4\}$. In the context of the present work, the CAD-FCIQMC calculations were run on the AS-FCIQMC wave functions of Sect. \ref{as_fciqmc_SI_sect} (1B and 2B). Both the cluster analysis and the following CCSD-like calculation were performed using a specialized code developed in the Piecuch group on a shared-memory Dell node consisting of two 10-core Intel Xeon Silver 4114 (2.2 GHz, {\color{red}{XX}} GB/core) processors. The $\{\bm{t}_1,\bm{t}_2\}$ amplitudes extracted from the AS-FCIQMC wave function were used as an initial guess for the final CCSD-like iterations, and 10 iterations were needed to converge the final CAD-FCIQMC energy to within $\num{1.0e-6}$ $E_{\text{H}}$. To eliminate the need for storing large sets of the quadruples cluster amplitudes, the cluster analysis code used in this work stored only $\{\bm{t}_1,\bm{t}_2,\bm{t}_3\}$ amplitudes extracted from FCIQMC, while the $\{\bm{t}_4\}$ amplitudes were processed on the fly. Specifically, only the $\langle \Phi_{ij}^{ab} | (\hat{V}_N \hat{T}_4)_C | \Phi \rangle$ terms of the CCSD system (corrected for $\{\bm{t}_3,\bm{t}_4\}$) were stored, as the number of these scale as the number of doubly excited determinants ($| \Psi_{ij}^{ab} \rangle$) rather than the entire $\{\bm{t}_4\}$ vector.\\
+The CAD-FCIQMC approach, introduced in Ref.\ \citenum{piecuch_monte_carlo_cc_jcp_2018}, belongs to a new category
+of semi-stochastic methods, in which information about higher-order wave function components extracted from
+the FCIQMC \cite{piecuch_Booth2009,piecuch_Cleland2010,ghanem_alavi_fciqmc_jcp_2019}
+or CCMC \cite{piecuch_Thom2010,piecuch_Franklin2016}
+propagations is read into deterministic CC computations.
+\cite{piecuch_monte_carlo_cc_prl_2017,piecuch_monte_carlo_cc_jcp_2018,piecuch_monte_carlo_eom_cc_jcp_2019,%
+piecuch_monte_carlo_eom_cc_mp_2020}
+CAD-FCIQMC can also be classified as an externally corrected CC method.
+\cite{piecuch_extcc_1,piecuch_extcc_2,piecuch_extcc_3,piecuch_extcc_4,piecuch_extcc_5,%
+piecuch_extcc_6,piecuch_extcc_7,piecuch_extcc_8,piecuch_extcc_9}
+We recall that all externally corrected CC approaches are based on the observation that as long as the
+Hamiltonian does not contain higher--than--two-body interactions, the CC amplitude equations projected
+on the singly and doubly excited determinants, in which no approximations are made, do not engage
+higher--than--four-body components of the cluster operator $T$. Thus, by solving these equations for the
+singly and doubly excited clusters, $T_{1}$ and $T_{2}$, respectively, in the presence of their exact triply
+($T_{3}$) and quadruply ($T_{4}$) excited counterparts extracted from FCI, one obtains the exact
+$T_{1}$ and $T_{2}$ and the exact correlation energy, which is given by the expression
+\begin{equation}
+\Delta E = \langle \Phi | \left[ H_{N} \exp(T_{1} + T_{2}) \right]_{C} |\Phi\rangle ,
+\label{eq-cad4}
+\end{equation}
+where $H_{N} = H - \langle \Phi | H | \Phi \rangle$ is the
+Hamiltonian in the normal-ordered form relative to the reference determinant $|\Phi \rangle$
+and the subscript $C$ designates the connected operator product. This means that by using a well-behaved
+source of the $T_{3}$ and $T_{4}$ clusters, capable of offering their accurate description for the $N$-electron
+system of interest, one can obtain
+highly accurate $T_{1}$, $T_{2}$, and $\Delta E$. In the case of CAD-FCIQMC, this well-behaved source
+is the FCIQMC wave function $|\Psi^{\rm (MC)}(\tau)\rangle$ obtained at a sufficiently long propagation time $\tau$,
+which converges to the corresponding FCI ground state as $\tau$ approaches $\infty$.
 
-%
+In order to extract the desired triply and quadruply excited clusters from the FCIQMC
+state $|\Psi^{\rm (MC)}(\tau)\rangle$,
+we rewrite it to satisfy the intermediate normalization as
+\begin{equation}
+|\Psi^{\rm (MC)}(\tau)\rangle = [1 + C^{\rm (MC)}(\tau)] |\Phi\rangle
+\equiv \left[1 + \sum_{n=1}^{N} C_{n}^{\rm (MC)}(\tau)\right] |\Phi\rangle,
+\label{eq-cad1}
+\end{equation}
+where $C_{n}^{\rm (MC)}(\tau)$ are the CI excitation operators determined by counting walkers
+at the $n$-tuply excited determinants contributing to $|\Psi^{\rm (MC)}(\tau)\rangle$ (dividing
+the numbers of these walkers by the number of walkers at $|\Phi\rangle$), replace Eq.\ (\ref{eq-cad1}) by the
+equivalent exponential ansatz,
+\begin{equation}
+|\Psi^{\rm (MC)}(\tau)\rangle = \exp[T^{\rm (MC)}(\tau)] |\Phi\rangle
+\equiv \exp \left[\sum_{n=1}^{N} T_{n}^{\rm (MC)}(\tau)\right] |\Phi\rangle ,
+\label{eq-cad2}
+\end{equation}
+where $T^{\rm (MC)}(\tau)$ is defined as $\ln [1 +  C^{\rm (MC)}(\tau)]$,
+and exploit the resulting relationships between the CI excitation operators $C_{n}^{\rm (MC)}(\tau)$
+and their CC counterparts $T_{n}^{\rm (MC)}(\tau)$ (see Ref.\ \citenum{piecuch_monte_carlo_cc_jcp_2018}).
+Assuming that $|\Psi^{\rm (MC)}(\tau)\rangle$ converges to the FCI wave function as $\tau$ increases,
+by solving the CC amplitude equations projected on the singly and doubly excited determinants,
+$|\Phi_{i}^{a}\rangle$ and $|\Phi_{ij}^{ab}\rangle$, respectively, in which
+$T_{3}$ and $T_{4}$ are replaced by their $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$
+counterparts obtained from the cluster analysis of $|\Psi^{\rm (MC)}(\tau)\rangle$, i.e.,
+\begin{equation}
+\begin{split}
+\langle \Phi_{i}^{a} | \left[ H_{N} \exp(T_{1} + T_{2} + T_{3}^{\rm (MC)}(\tau)) \right]_{C} |\Phi\rangle & = 0, \\
+\langle \Phi_{ij}^{ab} | \left[H_{N} \exp(T_{1} + T_{2} + T_{3}^{\rm (MC)}(\tau)
++ T_{4}^{\rm (MC)}(\tau))\right]_{C} |\Phi\rangle & = 0,
+\end{split}
+\label{eq-cad3}
+\end{equation}
+for the singly and doubly excited clusters $T_{1}$ and $T_{2}$, we are guaranteed to obtain
+the exact $T_{1}$ and $T_{2}$ and thus the exact, FCI, correlation energy
+in the $\tau = \infty$ limit. In other
+words, if the walker population and propagation time $\tau$ used to generate the FCIQMC
+state $|\Psi^{\rm (MC)}(\tau)\rangle$ are large enough, so that $T_{3}^{\rm (MC)}(\tau)$
+and $T_{4}^{\rm (MC)}(\tau)$ extracted from $|\Psi^{\rm (MC)}(\tau)\rangle$
+and $T_{1}$ and $T_{2}$ obtained by solving the CC system defined by Eq.\ (\ref{eq-cad3})
+are good approximations to their exact, FCI or FCC, values,
+the CAD-FCIQMC correlation energy calculated using Eq.\ (\ref{eq-cad4}) is anticipated
+to be a very accurate approximation to its FCI counterpart. The numerical evidence
+reported in Ref.\ \citenum{piecuch_monte_carlo_cc_jcp_2018}
+shows that this is indeed the case. It is worth noting
+that one does not have to process the entire FCIQMC wave function $|\Psi^{\rm (MC)}(\tau)\rangle$
+to determine $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ entering
+Eq.\ (\ref{eq-cad3}); all one needs to know are the CI excitation amplitudes through
+quadruples defining the $C_{n}^{\rm (MC)}(\tau)$ operators with $n = \mbox{1--4}$.
+
+As shown in Ref.\ \citenum{piecuch_monte_carlo_cc_jcp_2018}, by considering the CC system given by Eq.\ (\ref{eq-cad3})
+and by solving it for $T_{1}$ and $T_{2}$ deterministically, the CAD-FCIQMC approach can substantially
+accelerate the purely stochastic FCIQMC calculations. It also offers an interesting diagnostic of the quality
+of the instantaneous FCIQMC wave function $|\Psi^{\rm (MC)}(\tau)\rangle$ obtained at a given time $\tau$,
+especially of its $C_{n}^{\rm (MC)}(\tau)$ components through $n=4$, using computational steps that are
+similar to those characterizing the conventional CCSD method\cite{piecuch_ccsd}
+once the cluster analysis of $|\Psi^{\rm (MC)}(\tau)\rangle$, needed to determine
+$T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$, is completed.
+The latter feature is particularly useful in the context
+of the present study. Indeed, if in the process of solving the CC amplitude equations defined
+by Eq.\ (\ref{eq-cad3}) the $T_{1}$ and $T_{2}$ clusters significantly relax compared to their initial
+$T_{1}^{\rm (MC)}(\tau)$ and $T_{2}^{\rm (MC)}(\tau)$ values extracted from
+%%%%% the FCIQMC wave function
+$|\Psi^{\rm (MC)}(\tau)\rangle$, so that the final CAD-FCIQMC correlation energy $\Delta E$,
+calculated using Eq.\ (\ref{eq-cad4}),
+is considerably different than its instantaneous FCIQMC counterpart determined at time $\tau$,
+\begin{equation}
+\begin{split}
+\Delta E^{\rm (MC)}
+& = \langle \Phi | H_{N} \left[ C_{1}^{\rm (MC)}(\tau) + C_{2}^{\rm (MC)}(\tau) \right] |\Phi\rangle \\
+& = \langle \Phi | \left[ H_{N} \exp(T_{1}^{\rm (MC)}(\tau) + T_{2}^{\rm (MC)}(\tau)) \right]_{C} |\Phi\rangle ,
+\end{split}
+\label{eq-cad5}
+\end{equation}
+we can conclude that the FCIQMC wave function $|\Psi^{\rm (MC)}(\tau)\rangle$
+is not well converged yet. On the other hand,
+if $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ obtained by the cluster analysis of
+$|\Psi^{\rm (MC)}(\tau)\rangle$ are nearly exact, $T_{1}$, $T_{2}$, and $\Delta E$
+will relax very little during the CC iterations based on Eq.\ (\ref{eq-cad3}) compared
+to their $T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$, and $\Delta E^{\rm (MC)}$ values.
+This means that if the final CAD-FCIQMC correlation energy $\Delta E$, Eq.\ (\ref{eq-cad4}), obtained
+after solving the CC system defined by Eq.\ (\ref{eq-cad3}), and its initial FCIQMC counterpart
+$\Delta E^{\rm (MC)}$, Eq.\ (\ref{eq-cad5}), agree to within a certain numerical precision, we may be able to
+claim that the CAD-FCIQMC estimate of the correlation energy is stable to within the same precision.
+This follows the observation, which is a formal basis of all externally corrected CC approaches, that if
+$T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ were exact, $T_{1}$ and $T_{2}$ obtained by solving
+Eq.\ (\ref{eq-cad3}) would become exact too, i.e., the relaxation of $T_{1}$, $T_{2}$, and $\Delta E$ compared
+to their $T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$, and $\Delta E^{\rm (MC)}$ values would be zero.
+
+The deterministic {\it a posteriori} CAD-FCIQMC steps, as summarized above, may provide useful insights
+into the error bounds associated with the FCIQMC wave functions, but this is not to say that these
+steps alone provide complete information about errors. In analyzing the results of CAD-FCIQMC calculations,
+we have to keep in mind that the underlying FCIQMC
+wave function propagations have their own intrinsic errors, which the deterministic
+CAD-FCIQMC steps cannot eliminate, such as the errors resulting from the use of the initiator
+algorithm and finite walker population. This means that CAD-FCIQMC can provide us with
+accurate estimates of the $\tau = \infty$ limit of a given FCIQMC propagation, without
+having to go through time-consuming equilibration and blocking analysis, but it cannot
+eliminate errors resulting from the use of finite walker populations in determining the
+FCIQMC wave functions. Furthermore, there exist special cases of external wave functions
+serving as sources of $T_3$ and $T_4$ clusters in the CC amplitude
+equations for $T_{1}$ and $T_{2}$ of the type of Eq.\ (\ref{eq-cad3}), namely, all CC states defined by
+$T = \sum_{n=1}^{M} T_{n}$ with $M \geq 4$, starting from CCSDTQ,\cite{ccsdtq_paper_1_jcp_1991,ccsdtq_paper_2_jcp_1992}
+where errors determined through the above amplitude and correlation energy relaxation argument are by definition zero,
+even though the CC states with $M < N$ are not exact. On the other hand,
+it is unlikely that any of the FCIQMC wave functions $|\Psi^{\rm (MC)}(\tau)\rangle$, which are obtained
+in stochastic processes allowing walkers to explore the entire $N$-electron Hilbert space without setting up
+{\it a priori} constraints regarding the cluster structure of $|\Psi^{\rm (MC)}(\tau)\rangle$, is a CC state with
+$T = \sum_{n=1}^{M} T_{n}$ and $4 \leq M < N$. Thus, the degree of relaxation of the singly and doubly excited clusters
+and correlation energy, resulting from solving Eq.\ (\ref{eq-cad3}) for $T_{1}$ and $T_{2}$ in the presence
+of $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ extracted
+from the FCIQMC state $|\Psi^{\rm (MC)}(\tau)\rangle$,
+compared to their $T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$, and $\Delta E^{\rm (MC)}$ values,
+combined with the changes in the final CAD-FCIQMC correlation energy $\Delta E$ as a consequence of
+increasing the propagation time $\tau$, as in Ref.\ \citenum{piecuch_monte_carlo_cc_jcp_2018}, or,
+as has been done in this work, where $\tau$s were sufficiently long, as a consequence of increasing the
+target walker population in the AS-FCIQMC algorithm discussed in Section \ref{as_fciqmc_SI_sect},
+provides us with trustworthy estimates of the accuracy of CAD-FCIQMC computations. We will rely on
+these estimates when discussing the CAD-FCIQMC results for benzene summarized in Table \ref{cad_fciqmc_SI_table}
+in a later part of this section.
+
+Following the above description, the CAD-FCIQMC algorithm consists of the following three steps:
+\cite{piecuch_monte_carlo_cc_jcp_2018}
+{\bf (i)} a stochastic FCIQMC run to produce the wave function $|\Psi^{\rm (MC)}(\tau)\rangle$ for the subsequent
+cluster analysis (it is sufficient to store the CI excitation amplitudes through $C_{4}^{\rm (MC)}(\tau)$),
+{\bf (ii)} a cluster analysis of $|\Psi^{\rm (MC)}(\tau)\rangle$ to extract the $T_{n}^{\rm (MC)}(\tau)$ components
+with $n = \mbox{1--4}$ from the corresponding $C_{n}^{\rm (MC)}(\tau)$ amplitudes, and
+{\bf (iii)} a deterministic CCSD-like calculation using Eq.\ (\ref{eq-cad3}) in which one solves for the
+$T_{1}$ and $T_{2}$ clusters in the presence of the $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$
+components extracted from $|\Psi^{\rm (MC)}(\tau)\rangle$. In the case of the CAD-FCIQMC calculations
+for the benzene/cc-pVDZ system reported in this work, summarized in Table \ref{cad_fciqmc_SI_table}
+(see, also, Table \ref{results_SI_table} and Fig. 1 in the main text), the underlying FCIQMC
+computations defining step (i), which were performed using the {\texttt{NECI}} code,\cite{neci}
+exploited the AS-FCIQMC algorithm developed in Ref.\ \citenum{ghanem_alavi_fciqmc_jcp_2019}.
+The details of these calculations can be found in Section \ref{as_fciqmc_SI_sect}.
+Here, we only mention that the following instantaneous FCIQMC wave functions $|\Psi^{\rm (MC)}(\tau)\rangle$
+were subjected to CAD-FCIQMC processing: the AS-FCIQMC state obtained at the end of the equilibration
+period defined by 1 billion (1B) walkers, which we abbreviate as $|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$,
+and the AS-FCIQMC state, abbreviated as $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$, obtained at the end
+of the equilibration period defined by 2 billion (2B) walkers. To test the numerical stability of our highest-level
+CAD-FCIQMC results using 2B walkers, we also attempted to replace the instantaneous
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ wave function by the AS-FCIQMC(2B) state obtained by
+averaging the last 100 time steps, which we abbreviate as
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$.
+
+Once the $|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$, $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$,
+and $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$ states were generated and the
+required CI excitation amplitudes through $C_{4}^{\rm (MC)}(\tau)$ were stored, the remaining
+deterministic steps of the CAD-FCIQMC procedure, including the cluster analysis of each of the above
+AS-FCIQMC wave functions (step (ii)) and the final CCSD-like calculations of $T_{1}$ and $T_{2}$ based on
+Eq.\ (\ref{eq-cad3}) (step (iii)), were performed with the in-house codes developed by the Piecuch group in
+this project, which were interfaced with {\texttt{NECI}} and which used the same sets of one- and two-electron
+molecular integrals (corresponding to the RHF basis) as those employed in the underlying AS-FCIQMC calculations.
+These codes are characterized by several improvements compared to our initial implementation of the CAD-FCIQMC
+approach reported in Ref.\ \citenum{piecuch_monte_carlo_cc_jcp_2018}, which required storing the
+$T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ vectors prior to constructing the CC amplitude
+equations defined by Eq.\ (\ref{eq-cad3}). The CAD-FCIQMC codes used in this work eliminate the need for
+storing large sets of $T_{4}^{\rm (MC)}(\tau)$ cluster amplitudes, such as those that correspond
+to the $|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$, $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$,
+and $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$ wave functions for benzene. They
+store the $T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$, and $T_{3}^{\rm (MC)}(\tau)$ vectors
+extracted from the underlying AS-FCIQMC wave functions prior to constructing the CC amplitude equations for
+$T_{1}$ and $T_{2}$ defined by Eq.\ (\ref{eq-cad3}), while processing the $T_{4}^{\rm (MC)}(\tau)$
+amplitudes produced during the cluster analysis steps on the fly, saving only the $T_{4}^{\rm (MC)}(\tau)$-containing
+$\langle \Phi_{ij}^{ab} | [ H_N  T_{4}^{\rm (MC)}(\tau) ]_C | \Phi \rangle$ contributions to Eq.\ (\ref{eq-cad3}),
+whose number equals the number of the doubly excited determinants $|\Phi_{ij}^{ab} \rangle$. In principle,
+we could also avoid storing the $T_{3}^{\rm (MC)}(\tau)$ vectors, which would be particularly easy to do
+in the case of the linear $\langle \Phi_{i}^{a} | [ H_N  T_{3}^{\rm (MC)}(\tau) ]_C | \Phi \rangle$ and
+$\langle \Phi_{ij}^{ab} | [ H_N  T_{3}^{\rm (MC)}(\tau) ]_C | \Phi \rangle$ contributions, but we have not
+done it yet, since the third $T_{3}^{\rm (MC)}(\tau)$-containing term in the CC system defined by
+Eq.\ (\ref{eq-cad3}), namely, $\langle \Phi_{ij}^{ab} | [ H_N T_{1} T_{3}^{\rm (MC)}(\tau) ]_C | \Phi \rangle$,
+in which $T_{3}^{\rm (MC)}(\tau)$ is fixed at its FCIQMC value and $T_{1}$ is iterated, would require
+additional changes in the CC routines used to set up Eq.\ (\ref{eq-cad3}) in this work, which are beyond the
+scope of the present study. It is worth pointing out though that unlike $T_{4}^{\rm (MC)}(\tau)$,
+which becomes quickly unmanageable as the system size increases, the $T_{3}^{\rm (MC)}(\tau)$ amplitude
+vector is not difficult to store for the molecules of the size of benzene.
+Formally, $T_{3}^{\rm (MC)}(\tau)$ is a three-body component of $T$, suggesting large computational costs,
+but by the virtue of a stochastic wave function sampling during
+FCIQMC propagations the numbers of nonzero amplitudes in the $T_{3}^{\rm (MC)}(\tau)$ vectors
+are much smaller than the numbers of all triples in the corresponding $T_{3}$ operators. Thus, storing
+$T_{3}^{\rm (MC)}(\tau)$ prior to constructing the $T_{3}^{\rm (MC)}(\tau)$-containing terms in
+Eq.\ (\ref{eq-cad3}) is not a major bottleneck, when medium-size systems, such as benzene, are examined.
+Storing $T_{4}^{\rm (MC)}(\tau)$ is, so pre-computing the
+$\langle \Phi_{ij}^{ab} | [ H_N  T_{4}^{\rm (MC)}(\tau) ]_C | \Phi \rangle$ contributions to
+Eq.\ (\ref{eq-cad3}) during the cluster analysis is a lot more important.
+
+As a result of the above improvements in our CAD-FCIQMC codes, both the cluster analyses of the
+AS-FCIQMC wave functions (to be precise, of the CI excitation amplitudes through quadruples
+defining these wave functions) and the final CC iterations based on Eq.\ (\ref{eq-cad3}) represented a
+relatively inexpensive computational effort when the benzene/cc-pVDZ system was examined.
+Indeed, the cluster analysis of the one-billion-walker
+state $|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ required 5.6 hours using a single core of
+a shared-memory (SMP) node from Dell consisting of two 10-core Intel Xeon Silver 4114 2.20 GHz processors
+with 25.6 GB memory per core.
+In the case of the two-billion-walker states $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ and
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$, we needed 8.1 hours per state
+on the same machine to complete the cluster analysis step, again using only one core.
+The final CC iterations, in which we solved for the
+$T_1$ and $T_2$ clusters in the presence of the $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$
+components extracted from the above AS-FCIQMC wave functions, required about 200 seconds
+on all 20 cores of the aforementioned Dell node to reach convergence. We typically needed 10 iterations
+to converge the CAD-FCIQMC energies to within $10^{-6} \, E_{\text{H}}$ when using the $T_{1}^{\rm (MC)}(\tau)$
+and $T_{2}^{\rm (MC)}(\tau)$ amplitudes extracted from the AS-FCIQMC wave functions
+as initial guesses for $T_1$ and $T_2$ in the CCSD-like calculations based on Eq.\ (\ref{eq-cad3}).
+
+The disk storage and memory requirements characterizing the CAD-FCIQMC calculations for the benzene/cc-pVDZ
+system considered in this study were relatively modest too. We illustrate them by the most
+demanding CAD-FCIQMC runs based on processing the two-billion-walker AS-FCIQMC states, such as
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$. The {\tt NECI} output file containing the
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ wave function up to $C_{4}^{\rm (MC)}(\tau)$
+contributions was about 49 GB in size. About 35 GB of this were the data used in the cluster analysis
+(the list of determinants through quadruples contributing to $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$
+along with the corresponding walker numbers), and the rest was the information relevant to the AS-FCIQMC
+run that produced $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ which we did not need and could discard.
+As already explained, the $T_{4}^{\rm (MC)}(\tau)$ amplitudes extracted from the AS-FCIQMC wave functions
+used in the CAD-FCIQMC calculations reported in this work, needed to construct the
+$\langle \Phi_{ij}^{ab} | [ H_N  T_{4}^{\rm (MC)}(\tau) ]_C | \Phi \rangle$ contributions to
+Eq.\ (\ref{eq-cad3}), were processed on the fly, so we did not have to store them, but the
+$T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$, and $T_{3}^{\rm (MC)}(\tau)$ vectors
+produced during the cluster analysis were saved. For each of the AS-FCIQMC states considered
+in this study, we saved them as a single disk file. To facilitate and speed up the cluster
+analysis and the subsequent CC calculations based on Eq.\ (\ref{eq-cad3}), we kept all of the
+$T_{2}^{\rm (MC)}(\tau)$ and $T_{3}^{\rm (MC)}(\tau)$ amplitudes, including those obtained
+by permuting orbital indices, i.e., not just the non-redundant ones, in that file. As a result,
+for the most demanding, two-billion-walker AS-FCIQMC states considered in this work, such as
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$, the file containing the
+$T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$, and $T_{3}^{\rm (MC)}(\tau)$ amplitudes was
+about 81 GB in size. Given the fact that the aforementioned SMP Dell node used in the deterministic
+steps of our CAD-FCIQMC calculations had a sufficiently large memory (512 GB total), during each
+of the cluster analyses performed in this work we kept the file containing the AS-FCIQMC
+wave function information through quadruples and the file containing the $T_{1}^{\rm (MC)}(\tau)$,
+$T_{2}^{\rm (MC)}(\tau)$, and $T_{3}^{\rm (MC)}(\tau)$ amplitudes, as described above, in memory.
+This meant using 116 GB of resident memory during the cluster analysis of the most demanding,
+two-billion-walker AS-FCIQMC states considered in this work (35 GB for the wave function information
+through quadruples and 81 GB for the $T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$, and
+$T_{3}^{\rm (MC)}(\tau)$ amplitudes). We kept the $T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$,
+and $T_{3}^{\rm (MC)}(\tau)$ amplitudes (81 GB), along with the $T_{1}$ and $T_{2}$ vectors and
+the relevant intermediates needed to construct the CC equations based on Eq.\ (\ref{eq-cad3})
+($< 1$ GB), in memory as well.
+
 \begin{table}[ht]
 \begin{center}
-\caption{CAD-FCIQMC calculation details.}
+\caption{Results of the CAD-FCIQMC calculations based on the AS-FCIQMC wave functions obtained after
+equilibration runs using 1 billion (1B) and 2 billion (2B) walkers.}
 \label{cad_fciqmc_SI_table}
-\begin{tabular}{l|r}
+\begin{tabular}{l | @{\extracolsep{0.2in}} l}
 \toprule
-\multicolumn{1}{c|}{Method} & \multicolumn{1}{c}{$\Delta E$/m$E_{\text{H}}$} \\
+\multicolumn{1}{l|}{Calculation} & \multicolumn{1}{c}{$\Delta E$/$\text{m}E_{\text{H}}$} \\
 \midrule\midrule
-AS-FCIQMC(1B) & $-864.8\pm0.5$ \\
-CAD-FCIQMC-ext(1B) & $-867.01$ \\
-CAD‐FCIQMC$[1$‐$5]$(1B) & $-864.09$ \\
-CAD‐FCIQMC$[1,(3$+$4)/2]$(1B) & $-863.86$ \\
+AS-FCIQMC(1B)                & $-864.8 \pm 0.5$ \\
+CAD-FCIQMC-ext(1B)           & $-867.010$ \\
+CAD-FCIQMC[1--5](1B)         & $-864.089$ \\
+CAD-FCIQMC[1,(3+4)/2](1B)    & $-863.861$ \\
 \hline
-AS-FCIQMC(2B) & $-863.7\pm0.3$ \\
-CAD-FCIQMC-ext(2B) & $-863.46$ \\
-CAD‐FCIQMC$[1$‐$5]$(2B) & $-863.45$ \\
-CAD‐FCIQMC$[1,(3$+$4)/2]$(2B) & $-863.44$ \\
-CAD‐FCIQMC-ext(2B, 100-avg) & $-863.46$ \\
-CAD‐FCIQMC$[1$‐$5]$(2B, 100-avg) & $-863.44$ \\
+AS-FCIQMC(2B)                & $-863.7 \pm 0.3$ \\
+CAD-FCIQMC-ext(2B)           & $-863.464$ \\
+CAD-FCIQMC[1--5](2B)         & $-863.453$ \\
+CAD-FCIQMC[1,(3+4)/2](2B)    & $-863.438$ \\
+CAD-FCIQMC-ext(2B,100-avg)   & $-863.460$ \\
+CAD-FCIQMC[1--5](2B,100-avg) & $-863.439$ \\
 \midrule
 \end{tabular}
 \vspace{-0.6cm}
 \end{center}
 \end{table}
-%
-All CAD-FCIQMC results are presented in Table \ref{cad_fciqmc_SI_table}. To a first approximation (CAD-FCIQMC-ext), the correlation energy was computed using $\{\bm{t}_1,\bm{t}_2\}$ amplitudes extracted directly from the AS-FCIQMC wave function. Next, the final CAD-FCIQMC energy---obtained by solving for $\{\bm{t}_1\,\bm{t}_2\}$ in the presence of $\{\bm{t}_3,\bm{t}_4\}$---was computed in either of two ways, denoted as CAD‐FCIQMC$[1$‐$5]$ and CAD‐FCIQMC$[1,(3$+$4)/2]$. The information in the square brackets relates to the given treatment of the CCSD Goldstone-Hugenholtz diagrams quadratic in the $\hat{T}_2$ operator (adopting the diagram numbering from {\color{red}{Ref. ???}}); $[1$-$5]$ implies that all five of these are treated deterministically, while $[1,(3$+$4)/2]$ implies that this only applies to diagram 1 and an average of diagrams 3 and 4 (with the remaining contributions to the equation for the doubles amplitudes calculated using $\{\bm{t}_2\}$ amplitudes extracted directly from AS-FCIQMC). Further details on the CAD‐FCIQMC$[1,(3$+$4)/2]$ algorithm, which was originally considered in one of the approximate coupled-pair theories of {\color{red}{Ref. ???}} and recently implemented in the form of a DCSD approach to help capture strong correlations {\color{red}{(Ref. ???)}}, will be described in {\color{red}{Ref. ???}}. Finally, results are presented in Table \ref{cad_fciqmc_SI_table} for which the instantaneous AS-FCIQMC wave function---obtained at the end of a stochastic propagation---was replaced by an average over the last 100 time steps (100-avg). The CAD‐FCIQMC$[1$‐$5]$(2B) result is used in Fig. 1 of the main study.
+
+The CAD-FCIQMC results for the benzene/cc-pVDZ system considered in this study are summarized in Table
+\ref{cad_fciqmc_SI_table}. Following the above description, and to facilitate our error analysis, along
+with the final CAD-FCIQMC correlation energies $\Delta E$, determined using Eq.\ (\ref{eq-cad4}) after
+solving for the $T_1$ and $T_2$ clusters in the presence of $T_{3}^{\rm (MC)}(\tau)$ and
+$T_{4}^{\rm (MC)}(\tau)$ extracted from the AS-FCIQMC wave functions, abbreviated as CAD-FCIQMC[1--5]
+and CAD-FCIQMC[1,(3+4)/2], we show the initial projected correlation energies $\Delta E^{\rm (MC)}$,
+Eq.\ (\ref{eq-cad5}), calculated using the $T_{1}^{\rm (MC)}(\tau)$ and $T_{2}^{\rm (MC)}(\tau)$
+amplitudes prior to the CC iterations based on Eq.\ (\ref{eq-cad3}), abbreviated as CAD-FCIQMC-ext.
+We also show the results of the underlying AS-FCIQMC propagations, along with the corresponding error
+bars, obtained after equilibrating walker populations and performing the blocking analyses
+discussed in Section \ref{as_fciqmc_SI_sect}. For clarity of our presentation, each of the acronyms
+seen in Table \ref{cad_fciqmc_SI_table} is augmented with the information about the target walker
+population used in the stochastic AS-FCIQMC run preceding the deterministic CAD-FCIQMC steps. Thus,
+the CAD-FCIQMC-ext(1B), CAD-FCIQMC[1--5](1B), and CAD-FCIQMC[1,(3+4)/2](1B) correlation energies
+correspond to the instantaneous AS-FCIQMC(1B) state obtained at the end of the equilibration period
+using 1 billion walkers, which we previously abbreviated as $|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$,
+whereas the CAD-FCIQMC-ext(2B), CAD-FCIQMC[1--5](2B), and CAD-FCIQMC[1,(3+4)/2](2B) results correspond to
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$. The last two correlation energies in Table
+\ref{cad_fciqmc_SI_table}, designated as CAD-FCIQMC-ext(2B,100-avg) and CAD-FCIQMC[1--5](2B,100-avg),
+correspond to the two-billion-walker AS-FCIQMC(2B) state obtained by averaging the last 100 time steps,
+abbreviated as $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$.
+The information in the square brackets at the CAD-FCIQMC acronyms in Table \ref{cad_fciqmc_SI_table}
+indicates the $(T_2)^{2}$ Goldstone-Hugenholtz diagrams entering the CCSD-like system used in the final
+stage of the CAD-FCIQMC calculations (adopting the diagram numbering taken from Fig. 4 in Ref.\
+\citenum{piecuch_extcc_2}) that were treated deterministically by solving the respective CC amplitude
+equations. Thus, CAD-FCIQMC[1--5] means that all five $(T_2)^{2}$ Goldstone-Hugenholtz diagrams
+of the CCSD-like system defined by Eq.\ (\ref{eq-cad3}) were treated deterministically, whereas
+CAD-FCIQMC[1,(3+4)/2] implies that only diagram 1 and an average of diagrams 3 and 4,
+which are responsible for capturing strong correlations
+(originally considered in one of the approximate coupled-pair theories discovered and tested in Ref.\
+\citenum{piecuch_acp_1991}, which was re-discovered as a distinguishable cluster approximation in
+Ref.\ \citenum{piecuch_dcd_2013}), were evaluated using the $T_{2}$ amplitudes obtained by solving
+the CC equations, with the rest of $(T_2)^{2}$ calculated using $T_{2}^{\rm (MC)}(\tau)$
+extracted from FCIQMC. Much of the discussion in this section focuses on the CAD-FCIQMC[1--5] approach,
+as introduced in Ref.\ \citenum{piecuch_monte_carlo_cc_jcp_2018}. The CAD-FCIQMC[1,(3+4)/2] algorithm
+will be discussed in detail in a separate publication.\cite{piecuch_cad-fciqmc-unpublished}
+
+As shown in Table \ref{cad_fciqmc_SI_table}, there is a great deal of consistency among the CAD-FCIQMC
+results, especially when the two-billion walker $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ and
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$ states are used as sources of
+the triply and quadruply excited clusters. In this case, the relaxation of the $T_{1}$ and $T_{2}$
+clusters and correlation energy $\Delta E$, resulting from iterating $T_{1}$ and $T_{2}$ in
+the presence of $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ extracted from
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ and
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$,
+compared to the initial $T_{1}^{\rm (MC)}(\tau)$, $T_{2}^{\rm (MC)}(\tau)$, and $\Delta E^{\rm (MC)}$
+values is virtually none, on the order of 0.01--0.03 $\text{m}E_{\text{H}}$ when the correlation
+energies are examined (cf. the CAD-FCIQMC[1--5](2B) and CAD-FCIQMC[1,(3+4)/2](2B)
+$\Delta E$ values in Table \ref{cad_fciqmc_SI_table} with their CAD-FCIQMC-ext(2B) counterpart
+or CAD-FCIQMC[1--5](2B,100-avg) with CAD-FCIQMC-ext(2B,100-avg)). This suggests that the
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ and $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$
+wave functions obtained in the AS-FCIQMC(2B) propagations using 2 billion walkers, at least their
+$C_{n}^{\rm (MC)}(\tau)$ components through $n = 4$, are numerically stable and very well converged.
+Given the fact that the AS-FCIQMC propagations are allowed to explore the entire many-electron Hilbert
+space and populate determinants higher than quadruples, we can anticipate that the $C_{n}^{\rm (MC)}(\tau)$
+wave function components with $n > 4$, which are intrinsically coupled to their $n \leq 4$ counterparts during
+the AS-FCIQMC calculations, are accurately represented by $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$
+and $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$ as well. While, as pointed out above,
+the relaxation of $T_{1}$, $T_{2}$, and $\Delta E$ in the CC iterations based on Eq.\ (\ref{eq-cad3}) could
+also become small if $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ and
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$ mimicked one of the truncated CC
+states with $T = \sum_{n=1}^{M} T_{n}$ and $4 \leq M < N$, we do not think that this is likely
+in the purely stochastic AS-FCIQMC runs that do not constrain the wave function's cluster structure.
+For example, neither $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ nor
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$ represent the CCSDTQ ($M=4$)
+wave function or an approximation to it, since all of the CAD-FCIQMC correlation energies resulting
+from the use of $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ and
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$ differ from the CCSDTQ correlation
+energy by 1 $\text{m}E_{\text{H}}$ or more. The remarkable numerical stability of the CAD-FCIQMC
+calculations using the two-billion-walker AS-FCIQMC states can be appreciated even more if we
+compare the CAD-FCIQMC[1--5](2B), CAD-FCIQMC[1,(3+4)/2](2B), and CAD-FCIQMC[1--5](2B,100-avg)
+correlation energies with one another. The CAD-FCIQMC[1--5](2B) and CAD-FCIQMC[1,(3+4)/2](2B)
+$\Delta E$ values agree to within 0.015 $\text{m}E_{\text{H}}$, although some $(T_2)^{2}$ diagrams
+participating in the CC iterations defining the latter calculation were determined using the fixed
+$T_{2}^{\rm (MC)}(\tau)$ amplitudes extracted from the $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$
+state. The CAD-FCIQMC[1--5](2B) and CAD-FCIQMC[1--5](2B,100-avg) correlation energies
+agree to within 0.014 $\text{m}E_{\text{H}}$, although the former calculation uses the
+instantaneous $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ wave function obtained at the end
+of the equilibration period to determine $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$,
+whereas the latter one relies on the $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$
+state obtained by averaging the last 100 time steps during walker equilibration stage.
+
+Our highest-level CAD-FCIQMC calculations using the two-billion-walker AS-FCIQMC states to provide
+the information about the triply and quadruply excited clusters suggest that the FCI correlation
+energy for the benzene/cc-pVDZ system examined in this work can be estimated at
+$-863.44(1) \, \text{m}E_{\text{H}}$ (rounded up in Table \ref{results_SI_table}
+to $-863.4 \, \text{m}E_{\text{H}}$). This result seems to be well converged in its own right,
+but it is additionally reassuring that all of our CAD-FCIQMC(2B) calculations, including
+those in which the $T_{1}$ and $T_{2}$ clusters were allowed to relax during the final
+CC iterations, fall within the error bars of the underlying AS-FCIQMC(2B) propagation,
+estimated at $\pm 0.3 \, \text{m}E_{\text{H}}$, which were obtained completely independently
+after equilibrating walker populations and performing the blocking analysis involving
+the last 2,637 time steps, discussed in Section \ref{as_fciqmc_SI_sect}. In fact, there is a
+great deal of consistency between our CAD-FCIQMC[1--5](1B) and CAD-FCIQMC[1,(3+4)/2](1B)
+calculations, in which the $T_{1}$ and $T_{2}$ clusters were iterated in the presence of
+$T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ extracted from the one-billion-walker
+$|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ state, and the purely stochastic
+AS-FCIQMC(1B) run. The correlation energy resulting from the CAD-FCIQMC calculations
+using $|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$, obtained by averaging
+the CAD-FCIQMC[1--5](1B) and CAD-FCIQMC[1,(3+4)/2](1B) $\Delta E$ values, of
+$-864.0(1) \, \text{m}E_{\text{H}}$, is slightly outside the $\pm 0.5 \, \text{m}E_{\text{H}}$
+error bars of the underlying AS-FCIQMC(1B) propagation, but only slightly. In fact,
+the one-billion-walker AS-FCIQMC calculation is not as well converged as the
+AS-FCIQMC(2B) run, as can be seen by comparing the projected CAD-FCIQMC-ext(1B) correlation
+energy, calculated using the $T_{1}^{\rm (MC)}(\tau)$ and $T_{2}^{\rm (MC)}(\tau)$
+amplitudes extracted from $|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$,
+with the converged CAD-FCIQMC[1--5](1B) and CAD-FCIQMC[1,(3+4)/2](1B) $\Delta E$
+values obtained after iterating $T_{1}$ and $T_{2}$. For example, the difference between
+the CAD-FCIQMC-ext(1B) correlation energy and its relaxed CAD-FCIQMC[1--5](1B) and
+CAD-FCIQMC[1,(3+4)/2](1B) counterparts is about $3 \, \text{m}E_{\text{H}}$, as opposed
+to 0.02--0.03 $\text{m}E_{\text{H}}$ when we compare the analogous two-billion-walker
+data. Despite all this, our converged
+CAD-FCIQMC calculations utilizing $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$
+extracted from the $|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ state produce
+the correlation energy which is in good agreement with both the extrapolated AS-FCIQMC(1B)
+and AS-FCIQMC(2B) values and with our highest-level CAD-FCIQMC results obtained
+using the two-billion-walker AS-FCIQMC states. This illustrates the
+ability of the deterministic CC iterations used by the CAD-FCIQMC approach,
+in which we relax the $T_{1}$ and $T_{2}$ amplitudes in the presence of the
+triply and quadruply excited clusters extracted from FCIQMC,
+to accurately extrapolate the results of the long-time FCIQMC dynamics.
+
+The fact that the substantial increase in the walker population in the
+underlying AS-FCIQMC calculations, from one to two billion, changes the final
+CAD-FCIQMC correlation energy very little is reassuring too, demonstrating that
+the semi-stochastic CAD-FCIQMC calculations are capable of reducing the walker population
+error of the underlying AS-FCIQMC propagations in a substantial manner. Indeed,
+the final CAD-FCIQMC correlation energies obtained by iterating $T_{1}$ and $T_{2}$
+in the presence of $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ extracted from FCIQMC
+change only by about $0.5 \, \text{m}E_{\text{H}}$ when the one-billion-walker
+$|\Psi_{\rm 1B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ state is replaced by its
+two-billion-walker $|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\rangle$ and
+$|\Psi_{\rm 2B}^{\rm (AS\mbox{-}FCIQMC)}\mbox{(100-avg)}\rangle$ counterparts.
+This should be compared to the $1.1 \, \text{m}E_{\text{H}}$ difference between
+the corresponding AS-FCIQMC(1B) and AS-FCIQMC(2B) correlation energies, although
+one should keep in mind that these energies carry stochastic errors estimated at
+$\pm 0.5 \, \text{m}E_{\text{H}}$ and $\pm 0.3 \, \text{m}E_{\text{H}}$, respectively.
+It is certainly encouraging that with a rather modest computational effort, the
+CAD-FCIQMC approach is capable of producing numerically stable and reasonably
+converged results. Given the above analysis and being conservative about the
+various errors that contribute to the CAD-FCIQMC calculations, we can conclude that our best
+FCI correlation energy estimate of about $-863.4 \, \text{m}E_{\text{H}}$,
+which we use in the present study as our final CAD-FCIQMC value, is accurate
+to within $0.5 \, \text{m}E_{\text{H}}$ (with the likelihood that the error
+bars associated with this result are even smaller).
+
+%%%%% END OF PIECUCH's SECTION, 24 JULY 2020 %%%%%
 
 \section{SHCI}
 
