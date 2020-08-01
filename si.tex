@@ -187,7 +187,7 @@ SHCI & $-864.2$ \\
 \vspace{-0.6cm}
 \end{figure}
 %
-In MBE-FCI theory~\cite{eriksen_mbe_fci_jpcl_2017,eriksen_mbe_fci_weak_corr_jctc_2018,eriksen_mbe_fci_strong_corr_jctc_2019,eriksen_mbe_fci_general_jpcl_2019}, the complete set of MOs for a given system is divided into a reference and an expansion space. An MBE-FCI expansion in the latter of these space hence recovers the residual correlation not captured by an FCI calculation constrained to the former. The MBE-FCI calculation of the present work is presented in Figure \ref{mbe_fci_SI_fig}, as performed in an embarrassingly parallel manner using the open-source {\texttt{PyMBE}} code~\cite{pymbe} on Intel Xeon E5-2697v4 (Broadwell) hardware (36 cores $@$ 2.3 GHz, 3.56 GB/core). The calculation was performed in a basis of localized Pipek-Mezey MOs~\cite{pipek_mezey_jcp_1989} with a ($6e$,$6$o) reference space consisting of the $\pi$- and $\pi^{\ast}$-orbitals and electrons. The final correlation energy is $\Delta E_{\text{MBE-FCI}} = -863.03$ m$E_{\text{H}}$.\\
+In MBE-FCI theory~\cite{eriksen_mbe_fci_jpcl_2017,eriksen_mbe_fci_weak_corr_jctc_2018,eriksen_mbe_fci_strong_corr_jctc_2019,eriksen_mbe_fci_general_jpcl_2019}, the complete set of MOs for a given system is divided into a reference space and an expansion space. An MBE-FCI expansion in the latter of these spaces hence recovers the residual correlation not captured by an FCI calculation constrained to the former. The MBE-FCI calculation of the present work is presented in Figure \ref{mbe_fci_SI_fig}, as performed in an embarrassingly parallel manner using the open-source {\texttt{PyMBE}} code~\cite{pymbe} on Intel Xeon E5-2697v4 (Broadwell) hardware (36 cores $@$ 2.3 GHz, 3.56 GB/core). The calculation was performed in a basis of localized Pipek-Mezey MOs~\cite{pipek_mezey_jcp_1989} with a ($6e$,$6$o) reference space consisting of the $\pi$- and $\pi^{\ast}$-orbitals and electrons. The final correlation energy is $\Delta E_{\text{MBE-FCI}} = -863.03$ m$E_{\text{H}}$.\\
 
 In the course of preparing the code for running high-accuracy MBE-FCI calculations on the benzene molecule, a new screening protocol was implemented. At each order, MOs are screened away from the full expansion space according to their relative (absolute) magnitude, which in turn leads to a reduced number of increment calculations at the orders to follow. Specifically, only the MOs of the expansion space (at any given order) that give rise to the numerically largest increments will be retained at the following order. For the calculation of the present work, the percentages of the expansion space retained ($a_{\text{retain}}$) alongside the number of individual CASCI calculations at any given order ($K_{\text{CASCI}}$) are presented in Table \ref{mbe_fci_SI_table}. In addition, a number of optimizations were made to the code base. Most crucially, a new pruning scheme was introduced to make sure that only non-redundant increments are stored in memory throughout the total MBE-FCI calculation. For instance, once the $i$th MO gets screened away from the expansion space, all increments at lower orders, which reference this MO, are not needed anymore and may thus be pruned. This allows for significantly larger problem sizes to be treated by the method. As such, the limiting factor in converging MBE-FCI even tighter for the problem at hand, that is, screening less throughout the expansion, is related to available computer ressources rather than physical memory.
 %
@@ -252,7 +252,7 @@ DMRG yields two separate results: a variational upper bound and an extrapolated 
 
 \section{AS-FCIQMC}\label{as_fciqmc_SI_sect}
 
-For details on the adaptive shift formalism, please see Ref. \citenum{ghanem_alavi_fciqmc_jcp_2019}. All AS-FCIQMC calculations were performed using the {\texttt{NECI}} code~\cite{neci,neci_jcp_2020} in parallel on Intel Xeon CPU E5-2698v4 nodes (40 cores $@$ 2.2 GHz, 6.4 GB/core). The orbitals used were those of a preceding RHF orbitals and the FCIQMC runs were performed in a basis of pure Slater determinants (no spin adaptation). Following an equilibration run with $\num{1.e8}$ walkers (yielding a correlation energy of $\Delta E_{\text{AS-FCIQMC(init)}} = -863.3\pm0.9$ m$E_{\text{H}}$), a first calculation with $\num{1.e9}$ (1B) walkers (growing from $\num{1.e8}$) yielded a correlation energy $\Delta E_{\text{AS-FCIQMC(1B)}} = -864.8\pm0.5$ m$E_{\text{H}}$. Next, a second calculation with $\num{2.e9}$ (2B) walkers (growing from $\num{1.e9}$) resulted in a correlation energy of $\Delta E_{\text{AS-FCIQMC(2B)}} = -863.7\pm0.3$ m$E_{\text{H}}$. The stochastic error bar of $0.3$ m$E_{\text{H}}$ is derived by averaging over the last 2637 time steps (discarding the first 5000 time steps for walker growth and equilibration period), and doing a blocking analysis. The AS‐FCIQMC(2B) result is used in Fig. 1 of the main text. For the largest AS-FCIQMC calculations (2B), the {\texttt{NECI}} code used 2.6 GB/core, i.e., 3162 Gb in total distributed over 32 nodes (40 cores/node).
+For details on the adaptive shift formalism, please see Ref. \citenum{ghanem_alavi_fciqmc_jcp_2019}. All AS-FCIQMC calculations were performed using the {\texttt{NECI}} code~\cite{neci,neci_jcp_2020} in parallel on Intel Xeon CPU E5-2698v4 nodes (40 cores $@$ 2.2 GHz, 6.4 GB/core). The orbitals used were those of a preceding RHF calculation and the FCIQMC runs were performed in a basis of pure Slater determinants (no spin adaptation). Following an equilibration run with $\num{1.e8}$ walkers (yielding a correlation energy of $\Delta E_{\text{AS-FCIQMC(init)}} = -863.3\pm0.9$ m$E_{\text{H}}$), a first calculation with $\num{1.e9}$ (1B) walkers (growing from $\num{1.e8}$) yielded a correlation energy $\Delta E_{\text{AS-FCIQMC(1B)}} = -864.8\pm0.5$ m$E_{\text{H}}$. Next, a second calculation with $\num{2.e9}$ (2B) walkers (growing from $\num{1.e9}$) resulted in a correlation energy of $\Delta E_{\text{AS-FCIQMC(2B)}} = -863.7\pm0.3$ m$E_{\text{H}}$. The stochastic error bar of $0.3$ m$E_{\text{H}}$ is derived by averaging over the last 2637 time steps (discarding the first 5000 time steps for walker growth and equilibration period), and doing a blocking analysis. The AS‐FCIQMC(2B) result is used in Fig. 1 of the main text. For the largest AS-FCIQMC calculations (2B), the {\texttt{NECI}} code used 2.6 GB/core, i.e., 3162 Gb in total distributed over 32 nodes (40 cores/node).
 
 %%%%% PIECUCH's SECTION, 24 JULY 2020 %%%%%
 
@@ -705,7 +705,7 @@ bars associated with this result are even smaller).
 
 \section{SHCI}
 
-For details of the current version of SHCI theory, please see Refs. \citenum{sharma_umrigar_heat_bath_ci_prr_2020} and \citenum{toulouse_umrigar_heat_bath_ci_arxiv_2020} as well as references therein. SHCI, in common with other selected configuration interaction plus perturbation theory (SCI+PT) methods has two stages. In the first stage a variational wave function is constructed iteratively, starting from a determinant that is expected to have a significant amplitude in the final wave function. The number of determinants in the variational wavefunction is controlled by a parameter $\epsilon_1$. In the second stage, second-order Epstein-Nesbet perturbation theory is used to improve upon the variational energy. The number of determinants used to compute the perturbative correction is controlled by a second parameter $\epsilon_2$, which is chosen in this study to be $\epsilon_2 = 10^{-3} \times \epsilon_1$. The total energy (sum of the variational energy and the perturbative correction) is computed at several values of $\epsilon_1$ and extrapolated to $\epsilon_1 \to 0$ to obtain an estimate for the full configuration interaction (FCI) energy.\\
+For details of the current version of SHCI theory, please see Refs. \citenum{sharma_umrigar_heat_bath_ci_prr_2020} and \citenum{toulouse_umrigar_heat_bath_ci_arxiv_2020} as well as references therein. SHCI, in common with other selected configuration interaction plus perturbation theory (SCI+PT) methods, has two stages. In the first stage, a variational wave function is constructed iteratively, starting from a determinant that is expected to have a significant amplitude in the final wave function. The number of determinants in the variational wave function is controlled by a parameter $\epsilon_1$. In the second stage, second-order Epstein-Nesbet perturbation theory is used to improve upon the variational energy. The number of determinants used to compute the perturbative correction is controlled by a second parameter $\epsilon_2$, which is chosen in this study to be $\epsilon_2 = 10^{-3} \times \epsilon_1$. The total energy (sum of the variational energy and the perturbative correction) is computed at several values of $\epsilon_1$ and extrapolated to $\epsilon_1 \to 0$ to obtain an estimate for the FCI energy.\\
 
 The convergence of the SHCI variational and total energies with respect to the number of determinants depends on the choice of orbitals. The simplest choice, Hartree-Fock orbitals, typically give slow convergence. Natural orbitals, obtained from SHCI, give faster convergence, and orbitals optimized within SHCI to minimize the variational energy at some fairly large value of $\epsilon_1$ give yet faster convergence. For molecules with more than a few atoms, split-localized optimized orbitals give faster convergence than delocalized optimized orbitals. In this study we used split-localized optimized orbitals constructed using the methods described in Ref. \citenum{toulouse_umrigar_heat_bath_ci_arxiv_2020}. The value of $\epsilon_1$ used in the optimization was $\num{2.e-3}$ m$E_{\text{H}}$ for the blind test, and $\num{1.e-4}$ m$E_{\text{H}}$ for the subsequent improved calculations.\\
 
@@ -728,7 +728,7 @@ and the number of time-reversal symmetrized determinants and the number of deter
 \begin{center}
 \caption{SHCI variational and total energy convergence.  The top block of the table is for the
 partially optimized orbitals used in the blind test, whereas the bottom block is for further optimized orbitals
-and a smaller values of $\epsilon_1$.  The errors in the total energies, $E_{\rm tot}$, for finite values of $\epsilon_1$ are
+and smaller values of $\epsilon_1$.  The errors in the total energies, $E_{\rm tot}$, for finite values of $\epsilon_1$ are
 statistical errors.  These are negligible, particularly for the smaller $\epsilon_1$ values.
 The errors in $E_{\rm tot}$ extrapolated to $\epsilon_1=0$ are fit errors
 which typically greatly underestimate the actual extrapolation error.  The energy reported in the blind test was that from the
@@ -803,7 +803,7 @@ The lines are weighted quadratic fits, using varying number of points with the s
 \end{figure}
 %
 Details on the most recent version of ASCI theory has recently been presented elsewhere~\cite{tubman_whaley_selected_ci_jctc_2020,tubman_whaley_selected_ci_pt_arxiv_2018}. 
-All ASCI calculations were performed using a development version of Q-Chem 5.2\cite{shao2015advances}  on AMD EPYC 7401 hardware (2.0 GHz, 5.3 GB/core). The CI component was run in parallel over 24 processors but the subsequent Epstein-Nesbet PT2 correction was computed on a single processor. The active space orbitals were optimized from canonical HF MOs in an multiconfigurational self-consistent field (MCSCF) manner (while only considering active-active rotations, i.e. keeping the core levels frozen), using $5\times 10^5$ ASCI selected determinants  \cite{levine2020casscf}, prior to PT2 calculations with varying number of determinants. The computed ASCI results are presented in  Figure \ref{asci_SI_fig}, and the final extrapolated correlation energy is estimated to be $\Delta$E$_\textrm{ASCI}$ =-860.0 $\pm$ 0.2 m$E_{\text{H}}$ with the error bar spanned by the uncertainty in the extrapolation towards the limit of zero PT2 correction (standard deviation of a linear fit with last 3 points, as described in Ref \citenum{hait2019levels}).
+All ASCI calculations were performed using a development version of Q-Chem 5.2\cite{shao2015advances}  on AMD EPYC 7401 hardware (2.0 GHz, 5.3 GB/core). The CI component was run in parallel over 24 processors but the subsequent Epstein-Nesbet PT2 correction was computed on a single processor. The active space orbitals were optimized from canonical HF MOs in an multiconfigurational self-consistent field (MCSCF) manner (while only considering active-active rotations, i.e. keeping the core levels frozen), using $5\times 10^5$ ASCI selected determinants  \cite{levine2020casscf}, prior to PT2 calculations with varying number of determinants. The computed ASCI results are presented in  Figure \ref{asci_SI_fig}, and the final extrapolated correlation energy is estimated to be $\Delta$E$_\textrm{ASCI} = -860.0 \pm 0.2$ m$E_{\text{H}}$ with the error bar spanned by the uncertainty in the extrapolation towards the limit of zero PT2 correction (standard deviation of a linear fit with last 3 points, as described in Ref \citenum{hait2019levels}).
 
 \subsection{ASCI with localized orbitals}\label{sec:asciloc}
 
@@ -822,7 +822,7 @@ It is however worth noting that this localized orbital result is essentially out
 		$5\times10^5$    & $-698.34$        & $-129.41$    & $-827.75$            & $5\times10^5$ & $-735.12$     & $-89.49$  & $-824.62$         \\
 		$1\times10^6$    & $-709.96$        & $-120.04$    & $-830.00$            & $1\times10^6$ & $-749.43$     & $-79.17$  & $-828.60$         \\
 		$2\times10^6$    & $-721.68$        & $-110.61$    & $-832.29$            & $2\times10^6$ & $-761.51$     & $-70.49$  & $-832.00$         \\
-		$5\times10^5$    & $-737.13$        & $-98.25$     & $-835.38$            & $4\times10^5$ & $-772.35$     & $-62.83$  & $-835.18$         \\\hline 
+		$5\times10^6$    & $-737.13$        & $-98.25$     & $-835.38$            & $4\times10^6$ & $-772.35$     & $-62.83$  & $-835.18$         \\\hline 
 		Fit         &                &            & $-860.0\pm0.2$            & Fit      &             &         & $-861.3\pm0.5$ \\
 		\midrule
 	\end{tabular}
@@ -857,7 +857,7 @@ For both the original and the updated results, the remaining difference between 
 	\begin{tabular}{c|rrrrrrr}\toprule
 		C$_{\text{min}}$&$N_{\mathrm{cfg}}$&$\tilde{N}_{\mathrm{csf}}$\tnote{a}&$\tilde{N}_{\mathrm{det}}$\tnote{b}
 %		&$N_{csf,Q}$\tnote{c}
-		&$E_{\mathrm{c}}^{\mathrm{var}}/\mathrm{mE_h}$&$E_{\mathrm{c}}^{\mathrm{PT2}}/\mathrm{mE_h}$&$E_{\mathrm{c}}/\mathrm{mE_h}$&$T/s$\tnote{c}\\\toprule
+		&$E_{\mathrm{c}}^{\mathrm{var}}$/m$E_{\text{H}}$&$E_{\mathrm{c}}^{\mathrm{PT2}}$/m$E_{\text{H}}$&$E_{\mathrm{c}}$/m$E_{\text{H}}$&$T/s$\tnote{c}\\\toprule
 			$1.0\times10^{-3}$ &    14496 &    17890 &  50944&  $-612.591$  &  $-204.133$&  $-816.724$ &379\\
 			$5.0\times10^{-4}$ &    28188 &    36448 & 106317&  $-656.729$  &  $-162.637$&  $-819.366$ &669\\
 			$3.0\times10^{-4}$ &    48373 &    65080 & 199486&  $-676.147$  &  $-146.237$&  $-822.384$ &1481\\
@@ -890,7 +890,7 @@ For both the original and the updated results, the remaining difference between 
 	\begin{tabular}{c|rrrrrrr}\toprule
 		C$_{\text{min}}$&$N_{\mathrm{cfg}}$&$\tilde{N}_{\mathrm{csf}}$\tnote{a}&$\tilde{N}_{\mathrm{det}}$\tnote{b}
 %		&$N_{csf,Q}$\tnote{c}
-		&$E_{\mathrm{c}}^{\mathrm{var}}/\mathrm{mE_h}$&$E_{\mathrm{c}}^{\mathrm{PT2}}/\mathrm{mE_h}$&$E_{\mathrm{c}}/\mathrm{mE_h}$&$T/s$\tnote{c}\\\toprule
+		&$E_{\mathrm{c}}^{\mathrm{var}}$/m$E_{\text{H}}$&$E_{\mathrm{c}}^{\mathrm{PT2}}$/m$E_{\text{H}}$&$E_{\mathrm{c}}$/m$E_{\text{H}}$&$T/s$\tnote{c}\\\toprule
 			$1.0\times10^{-3}$ &    19811 &    24862 &  71137&  $-589.336$  &  $-213.573$&  $-802.909$ &301  \\
 			$5.0\times10^{-4}$ &    38400 &    51025 & 147228&  $-649.922$  &  $-160.205$&  $-810.127$ &837  \\
 			$3.0\times10^{-4}$ &    54907 &    76712 & 225685&  $-667.714$  &  $-145.170$&  $-812.884$ &1309 \\
@@ -929,7 +929,7 @@ For both the original and the updated results, the remaining difference between 
 	\begin{tabular}{c|rrrrrrr}\toprule
 		C$_{\text{min}}$&$N_{\mathrm{cfg}}$&$\tilde{N}_{\mathrm{csf}}$\tnote{a}&$\tilde{N}_{\mathrm{det}}$\tnote{b}
 %		&$N_{csf,Q}$\tnote{c}
-		&$E_{\mathrm{c}}^{\mathrm{var}}/\mathrm{mE_h}$&$E_{\mathrm{c}}^{\mathrm{PT2}}/\mathrm{mE_h}$&$E_{\mathrm{c}}/\mathrm{mE_h}$&$T/s$\tnote{c}\\\toprule
+		&$E_{\mathrm{c}}^{\mathrm{var}}$/m$E_{\text{H}}$&$E_{\mathrm{c}}^{\mathrm{PT2}}$/m$E_{\text{H}}$&$E_{\mathrm{c}}$/m$E_{\text{H}}$&$T/s$\tnote{c}\\\toprule
 		$6.0\times10^{-5}$ &   245224 &   379662 & 1379097
 %		& 2.74$\times10^{11}$
 		&  $-705.099$  &  $-122.996$&  $-828.095$ &491\\
@@ -974,7 +974,7 @@ For both the original and the updated results, the remaining difference between 
 	\begin{tabular}{c|rrrrrrr}\toprule
 		C$_{\text{min}}$&$N_{\mathrm{cfg}}$&$\tilde{N}_{\mathrm{csf}}$\tnote{a}&$\tilde{N}_{\mathrm{det}}$\tnote{b}
 %		&$N_{csf,Q}$\tnote{c}
-		&$E_{\mathrm{c}}^{\mathrm{var}}/\mathrm{mE_h}$&$E_{\mathrm{c}}^{\mathrm{PT2}}/\mathrm{mE_h}$&$E_{\mathrm{c}}/\mathrm{mE_h}$&$T/s$\tnote{c}\\\toprule
+		&$E_{\mathrm{c}}^{\mathrm{var}}$/m$E_{\text{H}}$&$E_{\mathrm{c}}^{\mathrm{PT2}}$/m$E_{\text{H}}$&$E_{\mathrm{c}}$/m$E_{\text{H}}$&$T/s$\tnote{c}\\\toprule
 	$6.0\times10^{-5}$ &  221314 &   338334 & 1172202
 %	&  1.76$\times10^{11}$
 	& $-689.523$ &    $-129.322$ &  $-818.846$ &326\\
@@ -1020,8 +1020,8 @@ For both the original and the updated results, the remaining difference between 
 
 \begin{table}[!htp]
 	\centering
-	\caption{Linearly extrapolated iCIPT2 correlation energies ($E_{\mathrm{c}}$ in $\mathrm{mE_h}$) for benzene and
-extrapolation errors (in $\mathrm{mE_h}$). A: extrapolation distance; B: standard deviation; C:
+	\caption{Linearly extrapolated iCIPT2 correlation energies ($E_{\mathrm{c}}$ in m$E_{\text{H}}$) for benzene and
+extrapolation errors (in m$E_{\text{H}}$). A: extrapolation distance; B: standard deviation; C:
 half length of 95\% confidence interval.}
 	\begin{tabular}{ccccccrc}\toprule
 		&Orbitals
