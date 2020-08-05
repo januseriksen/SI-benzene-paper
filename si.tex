@@ -149,7 +149,7 @@ H & $0.000000$ & $-2.484212$ & $0.000000$ \\
 
 \section{Main Results}
 
-Table \ref{results_SI_table} summarizes the results of the blind-challenge calculations shown Fig. 1 of the main text. Methods are ordered by the final correlation energy.
+Table \ref{results_SI_table} summarizes the results of the blind-challenge calculations shown in Fig. 1 of the main text. Methods are ordered by the final correlation energy.
 %
 \begin{table}[ht]
 \begin{center}
@@ -221,7 +221,7 @@ replicated data on the cores. We used the standard procedures described in Ref. 
 We obtained our initial integral file from the Umrigar group for the blind challenge and used these for the DMRG calculations.
 As we found out subsequently, the integral file corresponded to optimized SHCI orbitals. As this makes the results more complicated to reproduce,
 we provide the full integral file at \url{https://github.com/seunghoonlee89/SI-benzene-paper-DMRG}. We also
-verified on some smaller runs that using CCSD natural orbitals gave similar energies. The results from the backwards schedule of DMRG are listed in table~\ref{tab:DMRG_reverse}.\\
+verified on some smaller runs that using CCSD natural orbitals gave similar energies. The results from the backwards schedule of DMRG are listed in Table~\ref{tab:DMRG_reverse}.\\
 
 %
 \begin{table}[ht]
@@ -1126,9 +1126,9 @@ The CCSDTQ~\cite{ccsdtq_paper_1_jcp_1991,ccsdtq_paper_2_jcp_1992} correlation en
 \end{center}
 \end{table}
 %
-Table \ref{cluster_decomp_SI_table} presents results for a cluster decomposition~\cite{lehtola_head_gordon_fci_decomp_jcp_2017} of an ASCI wave function with $\num{5.e6}$ determinants (using delocalized orbitals, as described in Sec \ref{sec:asci}). These results indicate that most of the $\{\bm{c}_4\}$ (and higher order) CI coefficients comes from disconnected terms.\\
+Table \ref{cluster_decomp_SI_table} presents results for a cluster decomposition~\cite{lehtola_head_gordon_fci_decomp_jcp_2017} of an ASCI wave function with $\num{5.e6}$ determinants (using delocalized orbitals, as described in Sec \ref{sec:asci}). These results indicate that most of the $\{\bm{c}_4\}$ (and higher order) CI coefficients come from disconnected terms.\\
 
-Subsequent to the main study, a cluster decomposition was also carried out on a $\num{4.e6}$ determinant ASCI wave function with localized orbitals (as described in Sec \ref{sec:asciloc}), as this CI wave function had a lower variational energy than the previous one ($-772$ m$E_{\text{H}}$ correlation vs $-737$ m$E_{\text{H}}$) and was thus a better approximation to the true FCI wave function. The resulting values are provided in Table \ref{cluster_decomp_SI_table2}, which differ slightly from those in Table \ref{cluster_decomp_SI_table}. The general picture however remains the same, in that $\{\bm{c}_4\}$ and higher order excitations seem to mostly arise from disconnected terms. 
+Subsequent to the main study, a cluster decomposition was also carried out on a $\num{4.e6}$ determinant ASCI wave function with localized orbitals (as described in Sec \ref{sec:asciloc}), as this CI wave function had a lower variational energy than the previous one ($-772$ m$E_{\text{H}}$ correlation vs $-737$ m$E_{\text{H}}$) and was thus a better approximation to the true FCI wave function. The resulting values are provided in Table \ref{cluster_decomp_SI_table2}, which differ slightly from those in Table \ref{cluster_decomp_SI_table}. The general picture, however, remains the same, in that $\{\bm{c}_4\}$ and higher order excitations seem to mostly arise from disconnected terms. 
 
 \begin{table}[ht!]
 	\begin{center}
