@@ -1,5 +1,7 @@
 \documentclass[journal=jcp,manuscript=suppinfo]{achemso}
 \setkeys{acs}{maxauthors=0,articletitle=true}
+\newcounter{defcounter}
+\setcounter{defcounter}{0}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -16,6 +18,7 @@
 \usepackage{colortbl}
 \usepackage{amsmath}
 \usepackage{amsopn}
+\usepackage{amsthm}
 \usepackage{siunitx}
 \usepackage{bm}
 \usepackage{color}
@@ -27,6 +30,13 @@
 \usepackage{listings}
 \usepackage{enumerate}
 \usepackage{makecell}
+
+\newenvironment{siequation}{%
+\addtocounter{equation}{-1}
+\refstepcounter{defcounter}
+\renewcommand\theequation{S\thedefcounter}
+\begin{equation}}
+{\end{equation}}
 
 \captionsetup{labelfont=bf}
 \SectionNumbersOn
@@ -102,7 +112,7 @@
 
 \renewcommand*\titlesize{\Large}
 \renewcommand*\authorsize{\small}
-\renewcommand*\affilsize{\footnotesize}
+\renewcommand*\affilsize{\scriptsize}
 \renewcommand*\emailsize{\scriptsize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -276,10 +286,10 @@ higher--than--four-body components of the cluster operator $T$. Thus, by solving
 singly and doubly excited clusters, $T_{1}$ and $T_{2}$, respectively, in the presence of their exact triply
 ($T_{3}$) and quadruply ($T_{4}$) excited counterparts extracted from FCI, one obtains the exact
 $T_{1}$ and $T_{2}$ and the exact correlation energy, which is given by the expression
-\begin{equation}
+\begin{siequation}
 \Delta E = \langle \Phi | \left[ H_{N} \exp(T_{1} + T_{2}) \right]_{C} |\Phi\rangle ,
 \label{eq-cad4}
-\end{equation}
+\end{siequation}
 where $H_{N} = H - \langle \Phi | H | \Phi \rangle$ is the
 Hamiltonian in the normal-ordered form relative to the reference determinant $|\Phi \rangle$
 and the subscript $C$ designates the connected operator product. This means that by using a well-behaved
@@ -292,20 +302,20 @@ which converges to the corresponding FCI ground state as $\tau$ approaches $\inf
 In order to extract the desired triply and quadruply excited clusters from the FCIQMC
 state $|\Psi^{\rm (MC)}(\tau)\rangle$,
 we rewrite it to satisfy the intermediate normalization as
-\begin{equation}
+\begin{siequation}
 |\Psi^{\rm (MC)}(\tau)\rangle = [1 + C^{\rm (MC)}(\tau)] |\Phi\rangle
 \equiv \left[1 + \sum_{n=1}^{N} C_{n}^{\rm (MC)}(\tau)\right] |\Phi\rangle,
 \label{eq-cad1}
-\end{equation}
+\end{siequation}
 where $C_{n}^{\rm (MC)}(\tau)$ are the CI excitation operators determined by counting walkers
 at the $n$-tuply excited determinants contributing to $|\Psi^{\rm (MC)}(\tau)\rangle$ (dividing
 the numbers of these walkers by the number of walkers at $|\Phi\rangle$), replace Eq.\ (\ref{eq-cad1}) by the
 equivalent exponential ansatz,
-\begin{equation}
+\begin{siequation}
 |\Psi^{\rm (MC)}(\tau)\rangle = \exp[T^{\rm (MC)}(\tau)] |\Phi\rangle
 \equiv \exp \left[\sum_{n=1}^{N} T_{n}^{\rm (MC)}(\tau)\right] |\Phi\rangle ,
 \label{eq-cad2}
-\end{equation}
+\end{siequation}
 where $T^{\rm (MC)}(\tau)$ is defined as $\ln [1 +  C^{\rm (MC)}(\tau)]$,
 and exploit the resulting relationships between the CI excitation operators $C_{n}^{\rm (MC)}(\tau)$
 and their CC counterparts $T_{n}^{\rm (MC)}(\tau)$ (see Ref.\ \citenum{piecuch_monte_carlo_cc_jcp_2018}).
@@ -314,14 +324,14 @@ by solving the CC amplitude equations projected on the singly and doubly excited
 $|\Phi_{i}^{a}\rangle$ and $|\Phi_{ij}^{ab}\rangle$, respectively, in which
 $T_{3}$ and $T_{4}$ are replaced by their $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$
 counterparts obtained from the cluster analysis of $|\Psi^{\rm (MC)}(\tau)\rangle$, i.e.,
-\begin{equation}
+\begin{siequation}
 \begin{split}
 \langle \Phi_{i}^{a} | \left[ H_{N} \exp(T_{1} + T_{2} + T_{3}^{\rm (MC)}(\tau)) \right]_{C} |\Phi\rangle & = 0, \\
 \langle \Phi_{ij}^{ab} | \left[H_{N} \exp(T_{1} + T_{2} + T_{3}^{\rm (MC)}(\tau)
 + T_{4}^{\rm (MC)}(\tau))\right]_{C} |\Phi\rangle & = 0,
 \end{split}
 \label{eq-cad3}
-\end{equation}
+\end{siequation}
 for the singly and doubly excited clusters $T_{1}$ and $T_{2}$, we are guaranteed to obtain
 the exact $T_{1}$ and $T_{2}$ and thus the exact, FCI, correlation energy
 in the $\tau = \infty$ limit. In other
@@ -355,14 +365,14 @@ $T_{1}^{\rm (MC)}(\tau)$ and $T_{2}^{\rm (MC)}(\tau)$ values extracted from
 $|\Psi^{\rm (MC)}(\tau)\rangle$, so that the final CAD-FCIQMC correlation energy $\Delta E$,
 calculated using Eq.\ (\ref{eq-cad4}),
 is considerably different than its instantaneous FCIQMC counterpart determined at time $\tau$,
-\begin{equation}
+\begin{siequation}
 \begin{split}
 \Delta E^{\rm (MC)}
 & = \langle \Phi | H_{N} \left[ C_{1}^{\rm (MC)}(\tau) + C_{2}^{\rm (MC)}(\tau) \right] |\Phi\rangle \\
 & = \langle \Phi | \left[ H_{N} \exp(T_{1}^{\rm (MC)}(\tau) + T_{2}^{\rm (MC)}(\tau)) \right]_{C} |\Phi\rangle ,
 \end{split}
 \label{eq-cad5}
-\end{equation}
+\end{siequation}
 we can conclude that the FCIQMC wave function $|\Psi^{\rm (MC)}(\tau)\rangle$
 is not well converged yet. On the other hand,
 if $T_{3}^{\rm (MC)}(\tau)$ and $T_{4}^{\rm (MC)}(\tau)$ obtained by the cluster analysis of
